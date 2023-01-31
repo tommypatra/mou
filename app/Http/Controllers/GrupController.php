@@ -17,8 +17,7 @@ class GrupController extends Controller
      */
     public function index()
     {
-        return Pengguna::isAdmin();
-        //return view('dashboard.grup');
+        return view('dashboard.grup')->with('pengguna', Pengguna::isAdmin());
     }
 
     public function read()

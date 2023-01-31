@@ -30,14 +30,13 @@ class Pengguna extends Model
 
     public function isAdmin()
     {
-        return Akun::where('id', auth()->user()->id)
-            ->with('pengguna')
+        return pengguna::with('akun')
             ->with('grup', function ($grup) {
                 $grup->where([
                     ['id', 1],
-                    ['aktif', 1],
                 ]);
             })
+            ->where('akun_id', auth()->user()->id)
             ->get();
     }
 
