@@ -27,6 +27,11 @@ class Mou extends Model
 
     public function Kategori()
     {
-        return $this->belongsTo(Jenis::class);
+        return $this->belongsTo(Kategori::class);
+    }
+
+    public function File()
+    {
+        return $this->hasMany(File::class);
     }
 }

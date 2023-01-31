@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Mou;
+use App\Models\Akun;
+use App\Models\Grup;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Pengguna extends Model
 {
@@ -25,8 +28,29 @@ class Pengguna extends Model
         return $this->hasMany(Mou::class);
     }
 
-    public function File()
+    public function isAdmin()
     {
-        return $this->hasMany(File::class);
+        return Akun::where('id', auth()->user()->id)
+            ->with('pengguna')
+            ->with('grup', function ($grup) {
+                $grup->where([
+                    ['id', 1],
+                    ['aktif', 1],
+                ]);
+            })
+            ->get();
+    }
+
+    public function isPengguna()
+    {
+        return Akun::with("pengguna")
+            ->with('grup', function ($grup) {
+                $grup->where([
+                    ['id', 2],
+                    ['aktif', 1],
+                ]);
+            })
+            ->where('id', auth()->user()->id)
+            ->get();
     }
 }

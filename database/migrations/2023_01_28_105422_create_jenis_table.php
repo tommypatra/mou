@@ -16,9 +16,7 @@ class CreateJenisTable extends Migration
         Schema::create('jenis', function (Blueprint $table) {
             $table->id();
             $table->string("jenis", 100);
-            $table->foreignId("akun_id");
             $table->timestamps();
-            $table->foreign("akun_id")->references("id")->on("akuns")->cascadeOnUpdate();
         });
     }
 

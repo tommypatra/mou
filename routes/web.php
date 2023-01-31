@@ -36,17 +36,17 @@ Route::group(['middleware' => 'guest'], function () {
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.lnk');
-
-    //master grup
-    Route::get('/grup', [GrupController::class, 'index'])->name('grup.lnk');
-    Route::post('/grup-read', [GrupController::class, 'read'])->name('grup-read.lnk');
-    Route::post('/grup-update', [GrupController::class, 'update'])->name('grup-update.lnk');
-    Route::post('/grup-delete', [GrupController::class, 'delete'])->name('grup-delete.lnk');
-    Route::post('/grup-save', [GrupController::class, 'store'])->name('grup-save.lnk');
-
-
-    Route::get('/hakakses', [HakaksesController::class, 'index'])->name('hakakses.lnk');
-    Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.lnk');
-
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout.lnk');
+
+    Route::group(['middleware' => 'isAdmin'], function () {
+        //master grup
+        Route::get('/grup', [GrupController::class, 'index'])->name('grup.lnk');
+        Route::post('/grup-read', [GrupController::class, 'read'])->name('grup-read.lnk');
+        Route::post('/grup-update', [GrupController::class, 'update'])->name('grup-update.lnk');
+        Route::post('/grup-delete', [GrupController::class, 'delete'])->name('grup-delete.lnk');
+        Route::post('/grup-save', [GrupController::class, 'store'])->name('grup-save.lnk');
+
+        Route::get('/hakakses', [HakaksesController::class, 'index'])->name('hakakses.lnk');
+        Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.lnk');
+    });
 });

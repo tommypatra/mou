@@ -19,10 +19,8 @@ class CreateModulsTable extends Migration
             $table->string("link", 200)->nullable();
             $table->string("icon", 50)->nullable();
             $table->string("deskripsi", 300)->nullable();
-            $table->foreignId("akun_id");
             $table->enum("aktif", ["0", "1"])->default("0");
             $table->timestamps();
-            $table->foreign("akun_id")->references("id")->on("akuns")->onUpdate("cascade");
         });
     }
 

@@ -89,7 +89,6 @@ class DatabaseSeeder extends Seeder
         foreach ($dtdef as $dt) {
             Bagian::create([
                 'bagian' => $dt,
-                'akun_id' => 1,
                 'aktif' => "1"
             ]);
         }
@@ -121,7 +120,6 @@ class DatabaseSeeder extends Seeder
         foreach ($dtdef as $dt) {
             Jenis::create([
                 'jenis' => $dt,
-                'akun_id' => 1,
             ]);
         }
 
@@ -133,7 +131,6 @@ class DatabaseSeeder extends Seeder
         foreach ($dtdef as $dt) {
             Kategori::create([
                 'kategori' => $dt,
-                'akun_id' => 1,
             ]);
         }
 
@@ -156,7 +153,6 @@ class DatabaseSeeder extends Seeder
                 'menu' => $dt['menu'],
                 'link' => $dt['link'],
                 'icon' => $dt['icon'],
-                'akun_id' => 1,
             ]);
         }
 
@@ -183,7 +179,6 @@ class DatabaseSeeder extends Seeder
                 'modul_id' => $dt['modul_id'],
                 'menu_id' => $dt['menu_id'],
                 'urut' => $dt['urut'],
-                'akun_id' => 1,
             ]);
         }
 
@@ -194,7 +189,6 @@ class DatabaseSeeder extends Seeder
         foreach ($dtdef as $dt) {
             Provinsi::create([
                 'provinsi' => $dt,
-                'akun_id' => 1,
             ]);
         }
 
@@ -226,7 +220,6 @@ class DatabaseSeeder extends Seeder
             Kabupaten::create([
                 'kabupaten' => $dt['kabupaten'],
                 'provinsi_id' => $dt['provinsi_id'],
-                'akun_id' => 1,
             ]);
         }
 
@@ -241,7 +234,6 @@ class DatabaseSeeder extends Seeder
             Pihak::create([
                 'pihak' => $dt['pihak'],
                 'kabupaten_id' => $dt['kabupaten_id'],
-                'akun_id' => 1,
             ]);
         }
     }

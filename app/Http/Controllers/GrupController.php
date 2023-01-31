@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Grup;
+use App\Models\Pengguna;
 use DataTables;
 
 class GrupController extends Controller
@@ -16,13 +17,14 @@ class GrupController extends Controller
      */
     public function index()
     {
-        return view('dashboard.grup');
+        return Pengguna::isAdmin();
+        //return view('dashboard.grup');
     }
 
     public function read()
     {
         //$no = 1;
-        $data = Grup::select('grups.id', 'grups.grup', 'grups.aktif')->with("Akun")->get();
+        $data = Grup::select('grups.id', 'grups.grup', 'grups.aktif')->with("pengguna.akun")->get();
         return Datatables::of($data)->addIndexColumn()
             ->editColumn('aktif', function ($row) {
                 return ($row->aktif) ? "Aktif" : "Tidak Aktif";

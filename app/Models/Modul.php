@@ -10,11 +10,6 @@ class Modul extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function Akun()
-    {
-        return $this->belongsTo(Akun::class);
-    }
-
     public function Menu()
     {
         return $this->hasMany(Menu::class);

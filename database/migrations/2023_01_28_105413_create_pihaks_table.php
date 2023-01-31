@@ -17,10 +17,8 @@ class CreatePihaksTable extends Migration
             $table->id();
             $table->string("pihak", 100);
             $table->string("alamat", 250)->nullable();
-            $table->foreignId("akun_id");
             $table->foreignId("kabupaten_id");
             $table->timestamps();
-            $table->foreign("akun_id")->references("id")->on("akuns")->cascadeOnUpdate();
             $table->foreign("kabupaten_id")->references("id")->on("kabupatens")->cascadeOnUpdate();
         });
     }

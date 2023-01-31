@@ -20,12 +20,6 @@ class Grup extends Model
         return $this->hasMany(Pengguna::class);
     }
 
-    public function Akun()
-    {
-        return $this->belongsTo(Akun::class);
-    }
-
-
     public function Menu()
     {
         return $this->hasMany(Menu::class);

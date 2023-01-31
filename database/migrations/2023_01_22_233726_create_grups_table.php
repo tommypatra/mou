@@ -16,10 +16,8 @@ class CreateGrupsTable extends Migration
         Schema::create('grups', function (Blueprint $table) {
             $table->id();
             $table->string("grup", 100);
-            $table->foreignId("akun_id")->nullable();
             $table->enum("aktif", ["0", "1"])->default("1");
             $table->timestamps();
-            $table->foreign("akun_id")->references("id")->on("akuns")->onUpdate("cascade");
         });
     }
 

@@ -16,19 +16,9 @@ class Menu extends Model
         return $this->belongsTo(Grup::class);
     }
 
-    public function Akun()
-    {
-        return $this->belongsTo(Akun::class);
-    }
-
     public function Modul()
     {
         return $this->belongsTo(Modul::class);
-    }
-
-    public function Menu()
-    {
-        return $this->belongsTo(Menu::class);
     }
 
     public function Generate()

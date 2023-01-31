@@ -11,13 +11,13 @@ class Kabupaten extends Model
 
     protected $guarded = ["id"];
 
-    public function Akun()
-    {
-        return $this->belongsTo(Akun::class);
-    }
-
     public function Provinsi()
     {
         return $this->belongsTo(Provinsi::class);
+    }
+
+    public function Pihak()
+    {
+        return $this->hasMany(Pihak::class);
     }
 }

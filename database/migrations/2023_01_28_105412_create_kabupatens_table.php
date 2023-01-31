@@ -17,9 +17,7 @@ class CreateKabupatensTable extends Migration
             $table->id();
             $table->string("kabupaten", 100);
             $table->foreignId("provinsi_id");
-            $table->foreignId("akun_id");
             $table->timestamps();
-            $table->foreign("akun_id")->references("id")->on("akuns")->cascadeOnUpdate();
             $table->foreign("provinsi_id")->references("id")->on("provinsis")->cascadeOnUpdate();
         });
     }

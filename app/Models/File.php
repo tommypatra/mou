@@ -14,9 +14,4 @@ class File extends Model
     {
         return $this->belongsTo(Mou::class);
     }
-
-    public function Pengguna()
-    {
-        return $this->belongsTo(Pengguna::class);
-    }
 }

@@ -16,9 +16,8 @@ class CreateProvinsisTable extends Migration
         Schema::create('provinsis', function (Blueprint $table) {
             $table->id();
             $table->string("provinsi", 100);
-            $table->foreignId("akun_id");
+            $table->foreignId("akun_id")->nullable();
             $table->timestamps();
-            $table->foreign("akun_id")->references("id")->on("akuns")->cascadeOnUpdate();
         });
     }
 
