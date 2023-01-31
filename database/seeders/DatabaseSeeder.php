@@ -105,15 +105,14 @@ class DatabaseSeeder extends Seeder
         }
 
         //loop 30 user id random untuk bagian nya
-        for ($i = 1; $i <= 30; $i++) {
-            for ($i = 1; $i <= rand(1, 13); $i++) {
+        for ($i = 1; $i <= 30; $i++)
+            for ($j = 1; $j <= rand(1, 13); $j++) {
                 BagianAkun::create([
-                    'akun_id' => $dt,
-                    'bagian_id' => $i,
+                    'akun_id' => $i,
+                    'bagian_id' => $j,
                     'aktif' => "1"
                 ]);
             }
-        }
 
         //nilai default jenis
         $dtdef = [
