@@ -65,4 +65,9 @@ class Akun extends Authenticatable
     {
         return $this->hasMany(Bagian::class);
     }
+
+    public function BagianAkun()
+    {
+        return $this->hasMany(BagianAkun::class);
+    }
 }

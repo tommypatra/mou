@@ -3,21 +3,23 @@
 namespace Database\Seeders;
 
 use App\Models\Akun;
-use App\Models\Admin;
-use App\Models\Pengguna;
-use App\Models\Bagian;
-use App\Models\Kategori;
-use App\Models\Pihak;
 use App\Models\Grup;
 use App\Models\Menu;
-use App\Models\Modul;
+use App\Models\Admin;
 use App\Models\Jenis;
+use App\Models\Modul;
+use App\Models\Pihak;
+use App\Helpers\MyApp;
+use App\Models\Bagian;
+use App\Models\Kategori;
+use App\Models\Pengguna;
 use App\Models\Provinsi;
-use App\Models\Kabupaten;
 
+use App\Models\Kabupaten;
+use App\Models\BagianAkun;
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -90,6 +92,27 @@ class DatabaseSeeder extends Seeder
                 'akun_id' => 1,
                 'aktif' => "1"
             ]);
+        }
+
+        //nilai default bagian akun
+        //untuk admin
+        for ($i = 1; $i <= 13; $i++) {
+            BagianAkun::create([
+                'akun_id' => 1,
+                'bagian_id' => $i,
+                'aktif' => "1"
+            ]);
+        }
+
+        //loop 30 user id random untuk bagian nya
+        for ($i = 1; $i <= 30; $i++) {
+            for ($i = 1; $i <= rand(1, 13); $i++) {
+                BagianAkun::create([
+                    'akun_id' => $dt,
+                    'bagian_id' => $i,
+                    'aktif' => "1"
+                ]);
+            }
         }
 
         //nilai default jenis
