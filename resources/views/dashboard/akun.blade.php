@@ -7,12 +7,12 @@
 
 @section('pagetitle')
     <div class="pagetitle">
-        <h1>Grup</h1>
+        <h1>Akun</h1>
         <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('login.lnk') }}">Home</a></li>
-            <li class="breadcrumb-item">Akun</li>
-            <li class="breadcrumb-item active">Grup</li>
+            <li class="breadcrumb-item ">Akun</li>
+            <li class="breadcrumb-item active">Daftar</li>
         </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -23,7 +23,7 @@
 <div class="col-lg-12">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center mb-3">            
-            <h3 class="card-title d-flex">Data Grup</h3>
+            <h3 class="card-title d-flex">Daftar Akun</h3>
             <div class="list-inline d-flex">
                 <div class="buttons">
                     <a href="#" class="btn icon btn-primary btn-tambah"><i class="bi bi-plus-circle"></i></a>
@@ -37,9 +37,13 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Grup</th>
+                            <th>Nama</th>
+                            <th>Email</th>
+                            <th>Jenis Kelamin</th>
+                            <th>Alamat</th>
+                            <th>HP</th>
                             <th>Status</th>
-                            <th>Aksi</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -103,7 +107,7 @@
                 ["25", "50", "75", "Semua"]
             ],
             ajax: {
-                url: "{{ route('grup-read.lnk') }}",
+                url: "{{ route('akun-read.lnk') }}",
                 dataType: "json",
                 type: "POST",
                 data: function (d) {
@@ -139,7 +143,11 @@
             ],
             columns: [
                 {data: 'DT_RowIndex', width: "5%"},
-                {data: 'grup'},
+                {data: 'nama'},
+                {data: 'email'},
+                {data: 'kel'},
+                {data: 'alamat'},
+                {data: 'nohp'},
                 {data: 'aktif', },
                 {data: 'action', className: "text-center", width: "20%", orderable: false, searchable: false},
             ],
@@ -189,7 +197,7 @@
         $(document).on("click",".btn-ganti",function(){
             resetform();
             var formVal={_token:$("input[name=_token]").val(),id:$(this).data("id")};
-            appAjax("{{ route('grup-update.lnk') }}", formVal).done(function(vRet) {
+            appAjax("{{ route('akun-update.lnk') }}", formVal).done(function(vRet) {
                  if(vRet.status){
                     var myModal = new bootstrap.Modal(document.getElementById('modal-form-web'), {
                         backdrop: 'static',
@@ -207,7 +215,7 @@
         $(document).on("click",".btn-hapus",function(){
             if(confirm("apakah anda yakin?")){
                 var formVal={_token:$("input[name=_token]").val(),id:$(this).data("id")};
-                appAjax("{{ route('grup-delete.lnk') }}", formVal).done(function(vRet) {
+                appAjax("{{ route('akun-delete.lnk') }}", formVal).done(function(vRet) {
                     if(vRet.status){
                         reloadTable();
                     }

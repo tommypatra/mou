@@ -2,6 +2,7 @@
 
 use App\Models\Menu;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AkunController;
 use App\Http\Controllers\GrupController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
@@ -39,12 +40,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout.lnk');
 
     Route::group(['middleware' => 'isAdmin'], function () {
+        //daftar akun
+        Route::get('/akun', [AkunController::class, 'index'])->name('akun.lnk');
+        Route::post('/akun-create', [AkunController::class, 'create'])->name('akun-create.lnk');
+        Route::post('/akun-read', [AkunController::class, 'read'])->name('akun-read.lnk');
+        Route::post('/akun-update', [AkunController::class, 'update'])->name('akun-update.lnk');
+        Route::post('/akun-delete', [AkunController::class, 'delete'])->name('akun-delete.lnk');
+
         //master grup
         Route::get('/grup', [GrupController::class, 'index'])->name('grup.lnk');
+        Route::post('/grup-create', [GrupController::class, 'create'])->name('grup-create.lnk');
         Route::post('/grup-read', [GrupController::class, 'read'])->name('grup-read.lnk');
         Route::post('/grup-update', [GrupController::class, 'update'])->name('grup-update.lnk');
         Route::post('/grup-delete', [GrupController::class, 'delete'])->name('grup-delete.lnk');
-        Route::post('/grup-save', [GrupController::class, 'store'])->name('grup-save.lnk');
 
         Route::get('/hakakses', [HakaksesController::class, 'index'])->name('hakakses.lnk');
         Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.lnk');

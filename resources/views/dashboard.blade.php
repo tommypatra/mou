@@ -152,7 +152,7 @@
 
             <li class="message-item">
               <a href="#">
-                <img src="NiceAdmin/assets/images/messages-1.jpg" alt="" class="rounded-circle">
+                <img src="images/user-avatar.png" alt="" class="rounded-circle">
                 <div>
                   <h4>Maria Hudson</h4>
                   <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -166,7 +166,7 @@
 
             <li class="message-item">
               <a href="#">
-                <img src="NiceAdmin/assets/images/messages-2.jpg" alt="" class="rounded-circle">
+                <img src="images/user-avatar.png" alt="" class="rounded-circle">
                 <div>
                   <h4>Anna Nelson</h4>
                   <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
@@ -180,7 +180,7 @@
 
             <li class="message-item">
               <a href="#">
-                <img src="NiceAdmin/assets/images/messages-3.jpg" alt="" class="rounded-circle">
+                <img src="images/user-avatar.png" alt="" class="rounded-circle">
                 <div>
                   <h4>David Muldon</h4>
                   <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
