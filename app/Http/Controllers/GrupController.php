@@ -17,13 +17,15 @@ class GrupController extends Controller
      */
     public function index()
     {
-        return view('dashboard.grup')->with('pengguna', Pengguna::isAdmin());
+        //return view('dashboard.grup', ['dt' => Pengguna::CekAdmin()]);
+        return view('dashboard.grup');
     }
 
     public function read()
     {
         //$no = 1;
-        $data = Grup::select('grups.id', 'grups.grup', 'grups.aktif')->with("pengguna.akun")->get();
+        //$data = Grup::select('grups.id', 'grups.grup', 'grups.aktif')->with("pengguna.akun")->get();
+        $data = Grup::select('grups.id', 'grups.grup', 'grups.aktif')->get();
         return Datatables::of($data)->addIndexColumn()
             ->editColumn('aktif', function ($row) {
                 return ($row->aktif) ? "Aktif" : "Tidak Aktif";

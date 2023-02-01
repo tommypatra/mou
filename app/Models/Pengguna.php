@@ -28,28 +28,34 @@ class Pengguna extends Model
         return $this->hasMany(Mou::class);
     }
 
-    public function isAdmin()
+    public function GetAkses()
     {
         return pengguna::with('akun')
-            ->with('grup', function ($grup) {
-                $grup->where([
-                    ['id', 1],
-                ]);
-            })
+            ->with('grup')
             ->where('akun_id', auth()->user()->id)
             ->get();
     }
 
-    public function isPengguna()
+    public function CekAdmin()
     {
-        return Akun::with("pengguna")
-            ->with('grup', function ($grup) {
-                $grup->where([
-                    ['id', 2],
-                    ['aktif', 1],
-                ]);
-            })
-            ->where('id', auth()->user()->id)
-            ->get();
+        $retval = array("status" => false, "messages" => ["akses ditolak"]);
+        foreach (session()->get('groups') as $dp) {
+            if ($dp['id'] == 1) {
+                $retval = array("status" => true, "messages" => ["akses diterima"]);
+                break;
+            }
+        }
+        return json_encode($retval);
+    }
+
+    public function CekPengguna()
+    {
+        $retval = array("status" => false, "messages" => ["akses ditolak"]);
+        foreach (session()->get('groups') as $dp) {
+            if ($dp['id'] == 2) {
+                return array("status" => true, "messages" => ["akses diterima"]);
+            }
+        }
+        return json_encode($retval);
     }
 }

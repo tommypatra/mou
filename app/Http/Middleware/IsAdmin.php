@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use App\Models\Pengguna;
 
 class IsAdmin
 {
@@ -16,6 +17,8 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        return $next($request);
+        if (json_decode(Pengguna::CekAdmin())->status)
+            return $next($request);
+        return redirect()->back();
     }
 }
