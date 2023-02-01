@@ -1,8 +1,7 @@
 @extends('akun')
 
-@section('scriptCss')
-<link href="plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet"> 
-
+@section('head')
+  <link href="plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">
 @endsection
 
 @section('container')
@@ -70,9 +69,7 @@
 
   <script>
     sel2_jeniskelamin("#kel");
-
     $("#tanggallahir").val(vTgl_sql);
-
     $('.datepicker').bootstrapMaterialDatePicker({
         weekStart: 0,
         time: false,

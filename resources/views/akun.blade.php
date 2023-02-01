@@ -19,7 +19,7 @@
 
   <!-- Vendor CSS Files -->
   @include('partials.rescss') 
-  @yield('scriptCss')
+  @yield('head')
 
 
   <!-- =======================================================

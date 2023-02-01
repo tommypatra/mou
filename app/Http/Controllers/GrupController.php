@@ -29,12 +29,15 @@ class GrupController extends Controller
             ->addColumn('no', function ($row) {
                 return "";
             })
+            ->addColumn('cek', function ($row) {
+                return "<input type='checkbox' class='cekbaris' value='" . $row->id . "'>";
+            })
             ->addColumn('action', function ($row) {
                 $btn = '<button type="button" class="btn btn-sm btn-success btn-ganti" data-id="' . $row->id . '"><i class="bi bi-pencil-square"></i></button>
                         <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="' . $row->id . '"><i class="bi bi-trash3"></i></button>';
                 return $btn;
             })
-            ->rawColumns(['no', 'aktif', 'action'])
+            ->rawColumns(['no', 'aktif', 'action', 'cek'])
             ->make(true);
     }
 
@@ -88,11 +91,9 @@ class GrupController extends Controller
     {
         $retval = array("status" => false, "messages" => ["maaf, gagal dilakukan"]);
         try {
-            $data = Grup::where('id', $request['id'])->first();
-            if ($data) {
-                $data->delete();
-                $retval = array("status" => true, "messages" => ["data berhasil dihapus"]);
-            }
+            $ids = $request['id'];
+            Grup::whereIn('id', $ids)->delete();
+            $retval = array("status" => true, "messages" => ["data berhasil dihapus"]);
         } catch (\Throwable $e) {
             $retval['messages'] = [$e->getMessage()];
         }
