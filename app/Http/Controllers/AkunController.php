@@ -33,7 +33,7 @@ class AkunController extends Controller
                 if (isset($row->pengguna))
                     foreach ($row->pengguna as $dp) {
                         if ($dp->aktif == "0")
-                            $ret = '<span class="badge bg-success"><i class="bi bi-exclamation-triangle me-1"></i> ' . $dp->grup->grup . '</span>';
+                            $ret = '<span class="badge bg-danger"><i class="bi bi-exclamation-triangle me-1"></i> ' . $dp->grup->grup . '</span>';
                         else
                             $ret .= '<span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> ' . $dp->grup->grup . '</span>';
                         $ret .= "<br>";
@@ -44,10 +44,22 @@ class AkunController extends Controller
                 return "";
             })
             ->addColumn('action', function ($row) {
-                $btn = '<button type="button" class="btn btn-sm btn-success btn-ganti" data-id="' . $row->id . '"><i class="bi bi-pencil-square"></i></button>
-                        <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="' . $row->id . '"><i class="bi bi-trash3"></i></button>';
+                $btn = '<div class="btn-group me-1 mb-1">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                                <div class="dropdown-menu dropdown-menu-end" style="">
+                                    <a class="dropdown-item btn-ganti" data-id="' . $row->id . '" href="#"><i class="bi bi-pencil-square"></i> Ganti</a>
+                                    <a class="dropdown-item btn-ganti" data-id="' . $row->id . '" href="#"><i class="bi bi-pencil-square"></i> Atur Grup</a>
+                                    <a class="dropdown-item btn-hapus" data-id="' . $row->id . '" href="#"><i class="bi bi-trash"></i> Hapus</a>
+                                </div>
+                            </div>
+                        </div>';
+                // $btn = '<button type="button" class="btn btn-sm btn-success btn-ganti" data-id="' . $row->id . '"><i class="bi bi-pencil-square"></i></button>
+                //         <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="' . $row->id . '"><i class="bi bi-trash3"></i></button>';
                 return $btn;
             })
+
+
             ->rawColumns(['no', 'cek', 'aktif', 'grup', 'action'])
             ->make(true);
     }

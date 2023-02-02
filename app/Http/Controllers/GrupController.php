@@ -99,4 +99,8 @@ class GrupController extends Controller
         }
         return response()->json($retval);
     }
+
+    public function upload(Request $request)
+    {
+    }
 }

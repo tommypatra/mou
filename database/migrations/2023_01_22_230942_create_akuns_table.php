@@ -25,6 +25,7 @@ class CreateAkunsTable extends Migration
             $table->date("tanggallahir")->nullable();
             $table->text("alamat")->nullable();
             $table->string("nohp", 50)->nullable();
+            $table->string("foto")->nullable('images/user-avatar.png');
             $table->enum("aktif", ["0", "1"])->default("1");
             $table->timestamps();
             $table->index('kel');

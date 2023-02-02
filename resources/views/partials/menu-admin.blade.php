@@ -4,22 +4,22 @@
       </a>
       <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
         <li>
-          <a href="{{ route('akun.lnk') }}">
+          <a href="{{ route('akun') }}">
             <i class="bi bi-circle"></i><span>Daftar Pengguna</span>
           </a>
         </li>
         <li>
-          <a href="{{ route('grup.lnk') }}">
+          <a href="{{ route('grup') }}">
             <i class="bi bi-circle"></i><span>Grup</span>
           </a>
         </li>
         <li>
-          <a href="{{ route('grup.lnk') }}">
+          <a href="{{ route('grup') }}">
             <i class="bi bi-circle"></i><span>Bagian Pengguna</span>
           </a>
         </li>
         <li>
-          <a href="{{ route('hakakses.lnk') }}">
+          <a href="{{ route('hakakses') }}">
             <i class="bi bi-circle"></i><span>Hak Akses</span>
           </a>
         </li>

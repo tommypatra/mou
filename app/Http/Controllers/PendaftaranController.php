@@ -44,6 +44,7 @@ class PendaftaranController extends Controller
             //simpan sebagai pengguna
             $pengguna = Pengguna::create([
                 'akun_id' => $id,
+                'grup_id' => 2,
                 'token' => $token,
                 'aktif' => "0",
             ]);

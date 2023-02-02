@@ -25,36 +25,37 @@ use App\Http\Controllers\PendaftaranController;
 // });
 
 Route::group(['middleware' => 'guest'], function () {
-    Route::get('/', [LoginController::class, 'index'])->name('login.lnk');
+    Route::get('/', [LoginController::class, 'index'])->name('login');
     Route::get('/login', [LoginController::class, 'index']);
-    Route::post('/login', [LoginController::class, 'authenticate'])->name('ceklogin.lnk');
+    Route::post('/login', [LoginController::class, 'authenticate'])->name('ceklogin');
 
     //untuk pendaftaran
-    Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.lnk');
-    Route::get('/aktivasi-pengguna/{token}', [PendaftaranController::class, 'aktivasi_pengguna'])->name('aktivasi.lnk');
-    Route::post('/simpan-pendaftaran', [PendaftaranController::class, 'simpanpendaftaran'])->name('simpan-pendaftaran.lnk');
+    Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran');
+    Route::get('/aktivasi-pengguna/{token}', [PendaftaranController::class, 'aktivasi_pengguna'])->name('aktivasi');
+    Route::post('/simpan-pendaftaran', [PendaftaranController::class, 'simpanpendaftaran'])->name('simpan-pendaftaran');
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.lnk');
-    Route::get('/logout', [LoginController::class, 'logout'])->name('logout.lnk');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 
     Route::group(['middleware' => 'isAdmin'], function () {
         //daftar akun
-        Route::get('/akun', [AkunController::class, 'index'])->name('akun.lnk');
-        Route::post('/akun-create', [AkunController::class, 'create'])->name('akun-create.lnk');
-        Route::post('/akun-read', [AkunController::class, 'read'])->name('akun-read.lnk');
-        Route::post('/akun-update', [AkunController::class, 'update'])->name('akun-update.lnk');
-        Route::post('/akun-delete', [AkunController::class, 'delete'])->name('akun-delete.lnk');
+        Route::get('/akun', [AkunController::class, 'index'])->name('akun');
+        Route::post('/akun-create', [AkunController::class, 'create'])->name('akun-create');
+        Route::post('/akun-read', [AkunController::class, 'read'])->name('akun-read');
+        Route::post('/akun-update', [AkunController::class, 'update'])->name('akun-update');
+        Route::post('/akun-delete', [AkunController::class, 'delete'])->name('akun-delete');
+        Route::post('/akun-upload', [AkunController::class, 'delete'])->name('akun-upload');
 
         //master grup
-        Route::get('/grup', [GrupController::class, 'index'])->name('grup.lnk');
-        Route::post('/grup-create', [GrupController::class, 'create'])->name('grup-create.lnk');
-        Route::post('/grup-read', [GrupController::class, 'read'])->name('grup-read.lnk');
-        Route::post('/grup-update', [GrupController::class, 'update'])->name('grup-update.lnk');
-        Route::post('/grup-delete', [GrupController::class, 'delete'])->name('grup-delete.lnk');
+        Route::get('/grup', [GrupController::class, 'index'])->name('grup');
+        Route::post('/grup-create', [GrupController::class, 'create'])->name('grup-create');
+        Route::post('/grup-read', [GrupController::class, 'read'])->name('grup-read');
+        Route::post('/grup-update', [GrupController::class, 'update'])->name('grup-update');
+        Route::post('/grup-delete', [GrupController::class, 'delete'])->name('grup-delete');
 
-        Route::get('/hakakses', [HakaksesController::class, 'index'])->name('hakakses.lnk');
-        Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna.lnk');
+        Route::get('/hakakses', [HakaksesController::class, 'index'])->name('hakakses');
+        Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna');
     });
 });

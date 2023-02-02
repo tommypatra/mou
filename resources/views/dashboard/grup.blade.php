@@ -10,7 +10,7 @@
         <h1>Grup</h1>
         <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('login.lnk') }}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('login') }}">Home</a></li>
             <li class="breadcrumb-item">Akun</li>
             <li class="breadcrumb-item active">Grup</li>
         </ol>
@@ -50,9 +50,8 @@
         </div>
     </div>
 </div>
-@endsection
 
-<div class="modal fade" id="modal-form-web" tabindex="-1">
+<div class="modal fade" id="modal-form-web" role="dialog">
     <div class="modal-dialog modal-lg">
         <form id="fweb" class="row g-3 needs-validation" novalidate>
             @csrf
@@ -62,39 +61,41 @@
                     <h5 class="modal-title">FORM APLIKASI</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body row">
+                <div class="modal-body">
 
-                    <div class="col-8">
-                        <label for="grup" class="form-label">Nama Grup</label>
-                        <div class="input-group has-validation">
-                            <input type="text" name="grup" class="form-control" id="grup" required>
-                            <div class="invalid-feedback">Ketik grup anda!</div>
+                    <div class="row">
+                        <div class="col-8">
+                            <label for="grup" class="form-label">Nama Grup</label>
+                            <div class="input-group has-validation">
+                                <input type="text" name="grup" class="form-control" id="grup" required>
+                                <div class="invalid-feedback">Ketik grup anda!</div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-4">
-                        <label for="aktif" class="form-label">Status</label>
-                        <div class="input-group has-validation">
-                            <select name="aktif" id="aktif" class="form-control" required>
+                        <div class="col-4">
+                            <label for="aktif" class="form-label">Status</label>
+                            <select name="aktif" id="aktif" required>
                             </select>
                             <div class="invalid-feedback">pilih status aktif!</div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+@endsection
 
 @section("scriptJs")
     <script type="text/javascript" src="plugins/datatables/datatables.min.js"></script>
     <script src="js/select2lib.js"></script>
     <script type="text/javascript">
-        sel2_aktif4("#aktif","#modal-form-web");
+
+        sel2_aktif2("#aktif");
 
         var dtTable = $('.datatable').DataTable({
             processing: true,
@@ -105,7 +106,7 @@
                 ["25", "50", "75", "Semua"]
             ],
             ajax: {
-                url: "{{ route('grup-read.lnk') }}",
+                url: "{{ route('grup-read') }}",
                 dataType: "json",
                 type: "POST",
                 data: function (d) {
@@ -195,7 +196,7 @@
         $(document).on("click",".btn-ganti",function(){
             resetform();
             var formVal={_token:$("input[name=_token]").val(),id:$(this).data("id")};
-            appAjax("{{ route('grup-update.lnk') }}", formVal).done(function(vRet) {
+            appAjax("{{ route('grup-update') }}", formVal).done(function(vRet) {
                  if(vRet.status){
                     var myModal = new bootstrap.Modal(document.getElementById('modal-form-web'), {
                         backdrop: 'static',
@@ -219,7 +220,7 @@
         function hapus(idTerpilih){
             var formVal={_token:$("input[name=_token]").val(),id:idTerpilih};
             if(idTerpilih.length > 0 && confirm("apakah anda yakin?")){
-                appAjax("{{ route('grup-delete.lnk') }}", formVal).done(function(vRet) {
+                appAjax("{{ route('grup-delete') }}", formVal).done(function(vRet) {
                     if(vRet.status){
                         reloadTable();
                     }
@@ -251,7 +252,7 @@
             let formVal = $(this).serialize();
             let isValid = form.checkValidity();
             if(isValid){
-                appAjax('{{ route("grup-create.lnk") }}', formVal).done(function(vRet) {
+                appAjax('{{ route("grup-create") }}', formVal).done(function(vRet) {
                     if(vRet.status){
                         if(vRet.insert)
                             resetform();

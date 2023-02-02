@@ -33,7 +33,7 @@
       <button class="btn btn-primary w-100" type="submit">Masuk</button>
     </div>
     <div class="col-12">
-      <p class="small mb-0">Belum ada akun? <a href="{{ route('pendaftaran.lnk') }}">Daftar disini</a></p>
+      <p class="small mb-0">Belum ada akun? <a href="{{ route('pendaftaran') }}">Daftar disini</a></p>
     </div>
   </form>
 @endsection
@@ -46,14 +46,14 @@
       let formVal = $(this).serialize();
       let isValid = form.checkValidity();
       if(isValid){
-          appAjax('{{ route("ceklogin.lnk") }}', formVal).done(function(vRet) {
+          appAjax('{{ route("ceklogin") }}', formVal).done(function(vRet) {
             showmymessage(vRet.messages,vRet.status);
             if(vRet.status){
               //console.log(vRet.groups);
               //resetform();
               $('#fweb *').prop('disabled', true);
               window.setTimeout(function() {
-                window.location.href = '{{ route("dashboard.lnk") }}';
+                window.location.href = '{{ route("dashboard") }}';
               }, 3000);           
             }else{
               $('#password').val("");

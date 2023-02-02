@@ -326,7 +326,7 @@
 
     function logoutapp(){
       if(confirm("Apakah anda yakin?")){
-          window.location.replace('{{ route("logout.lnk") }}');   
+          window.location.replace('{{ route("logout") }}');   
       }
     }
     

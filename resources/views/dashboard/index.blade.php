@@ -5,7 +5,7 @@
         <h1>Halaman Utama</h1>
         <nav>
           <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="{{ route('login.lnk') }}">Home</a></li>
+              <li class="breadcrumb-item"><a href="{{ route('login') }}">Home</a></li>
           </ol>
         </nav>
     </div>

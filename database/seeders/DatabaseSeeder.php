@@ -70,9 +70,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         //SEEDER pakai Factories data faker untuk akun
-        Akun::factory(30)->create();
+        Akun::factory(5000)->create();
         //loop 30 untuk pengguna 
-        for ($i = 2; $i <= 30; $i++) {
+        for ($i = 2; $i <= 5001; $i++) {
             Pengguna::create([
                 'akun_id' => $i,
                 'grup_id' => 2,
@@ -104,7 +104,7 @@ class DatabaseSeeder extends Seeder
         }
 
         //loop 30 user id random untuk bagian nya
-        for ($i = 1; $i <= 30; $i++)
+        for ($i = 1; $i <= 5001; $i++)
             for ($j = 1; $j <= rand(1, 13); $j++) {
                 BagianAkun::create([
                     'akun_id' => $i,
