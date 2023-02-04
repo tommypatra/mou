@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Akun;
 use DataTables;
 
@@ -18,12 +20,16 @@ class AkunController extends Controller
 
     public function read()
     {
-        $data = Akun::select('id', 'nama', 'email', 'kel', 'alamat', 'nohp', 'aktif')
+        $data = Akun::select('id', 'nama', 'email', 'kel', 'alamat', 'nohp', 'aktif', 'foto')
             ->with('pengguna.grup')
             ->get();
         return Datatables::of($data)->addIndexColumn()
             ->editColumn('aktif', function ($row) {
                 return ($row->aktif) ? "Aktif" : "Tidak Aktif";
+            })
+            ->editColumn('foto', function ($row) {
+                $ret = ($row->foto == "images/user-avatar.png") ? $row->foto : asset('storage') . '/' . $row->foto;
+                return '<img src="' . $ret . '" alt="Profile" height="100px" class="rounded-circle">';
             })
             ->addColumn('cek', function ($row) {
                 return "<input type='checkbox' class='cekbaris' value='" . $row->id . "'>";
@@ -60,7 +66,7 @@ class AkunController extends Controller
             })
 
 
-            ->rawColumns(['no', 'cek', 'aktif', 'grup', 'action'])
+            ->rawColumns(['no', 'cek', 'aktif', 'foto', 'grup', 'action'])
             ->make(true);
     }
 
@@ -73,18 +79,51 @@ class AkunController extends Controller
             $insert = false;
 
         $datapost = $this->validate($request, [
-            'grup' => 'required|min:3',
+            'nama' => 'required|min:3',
+            'alamat' => 'required|min:3',
+            //'email' => 'required|email:dns|unique:akuns',
+            'email' => 'required|email:dns',
+            'kel' => 'required',
+            'tempatlahir' => 'required|min:3',
+            'tanggallahir' => 'required',
+            'nohp' => 'required|min:9',
             'aktif' => 'required',
         ]);
-        $datapost['akun_id'] = auth()->user()->id;
-        //dd($datapost);
+
+        if ($request['password']) {
+            $this->validate($request, [
+                'password' => 'required|alpha_num|min:8',
+            ]);
+            $datapost['password'] = Hash::make($request['password']);
+        }
         $retval['insert'] = $insert;
         try {
             DB::beginTransaction();
-            if ($insert)
-                $id = Akun::create($datapost)->id;
-            else {
+            //untuk cari
+            if (!$insert)
                 $cari = Akun::where("id", $request['id'])->first();
+
+            if ($request->hasFile('foto')) {
+                $this->validate($request, [
+                    'foto' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:1024'],
+                ]);
+                $file = $request->file('foto');
+                $ext = $file->getClientOriginalExtension();
+                $det =   [
+                    "size" => ceil($file->getSize() / 1000),
+                    "mime" => $file->getMimeType()
+                ];
+                $destinationPath = 'uploads/foto-profil';
+
+                $datapost['foto'] = $file->store($destinationPath);
+                if (!$insert) {
+                    AkunController::hapusfile($cari->foto);
+                }
+            }
+
+            if ($insert) {
+                $id = Akun::create($datapost)->id;
+            } else {
                 $cari->update($datapost);
             }
             $retval["status"] = true;
@@ -114,12 +153,29 @@ class AkunController extends Controller
     {
         $retval = array("status" => false, "messages" => ["maaf, gagal dilakukan"]);
         try {
-            $ids = $request['id'];
-            Akun::whereIn('id', $ids)->delete();
-            $retval = array("status" => true, "messages" => ["data berhasil dihapus"]);
+            $data = Akun::whereIn('id', $request['id'])->first();
+            if ($data) {
+                AkunController::hapusfile($data->foto);
+                $data->delete();
+                $retval = array("status" => true, "messages" => ["data berhasil dihapus"]);
+            }
         } catch (\Throwable $e) {
             $retval['messages'] = [$e->getMessage()];
         }
         return response()->json($retval);
+    }
+
+    public function hapusfile($file = null)
+    {
+        $retval = array("status" => false, "messages" => ["maaf, gagal dilakukan"]);
+        if ($file !== 'images/user-avatar.png') {
+            if (Storage::disk('public')->exists($file)) {
+                Storage::delete($file);
+                $retval = array("status" => true, "messages" => ["hapus file berhasil dilakukan"]);
+            } else {
+                $retval['messages'] = ["file tidak ditemukan"];
+            }
+        }
+        return $retval;
     }
 }

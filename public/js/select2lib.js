@@ -3,7 +3,7 @@ function sel2_datalokal(vselector, vdata={}, vModal=null, vAllow=false, vTags=fa
     data: vdata,
     placeholder: '- pilih -',
     multiple: vAllow,
-    dropdownParent: $(vselector).parent().parent(),
+    dropdownParent: $(vselector).parent(),
     allowClear: vTags,
   });
 }

@@ -45,6 +45,7 @@
                         <tr>
                             <th><input type="checkbox" class="cekSemua"></th>
                             <th>No</th>
+                            <th>Foto</th>
                             <th>Nama</th>
                             <th>Email</th>
                             <th>Jenis Kelamin</th>
@@ -82,8 +83,8 @@
                         <div class="col-8">
                             <div class="row">
                                 <div class="col-12"> 
-                                    <label for="grup" class="form-label">Nama Lengkap (tanpa title)</label>
-                                    <input type="text" name="grup" class="form-control" id="grup" required>
+                                    <label for="nama" class="form-label">Nama Lengkap (tanpa title)</label>
+                                    <input type="text" name="nama" class="form-control" id="nama" required>
                                     <div class="invalid-feedback">Nama lengkap anda!</div>
                                 </div>
                                 <div class="col-12">
@@ -99,8 +100,8 @@
                         </div>
                         <div class="col-4  text-center">
                             <label for="kel" class="form-label">Foto Profil</label>
-                            <input class="form-control" type="file" id="foto">
-                            <img src="images/user-avatar.png" alt="Profile" class="rounded-circle">
+                            <input class="form-control" type="file" id="foto" nama="foto">
+                            <img src="images/user-avatar.png" alt="Profile" id="fotoprofil" width="100px" class="rounded-circle">
                         </div>
                     </div>
 
@@ -139,7 +140,14 @@
                             <input type="text" name="nohp" class="form-control" id="nohp" required>
                             <div class="invalid-feedback">No.HP anda!</div>
                         </div>
+                        <div class="col-5">
+                            <label for="fldpass" class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control" id="password" >
+                        </div>
+                    </div>
 
+
+                    <div class="row">
                         <div class="col-4">
                             <label for="aktif" class="form-label">Status</label>
                             <select name="aktif" id="aktif" required>
@@ -147,17 +155,8 @@
                             <div class="invalid-feedback">pilih status aktif!</div>
                         </div>
                     </div>
-
-
-                    <div class="row">
-                        <div class="col-5">
-                        <label for="fldpass" class="form-label">Password</label>
-                        <input type="password" name="password" class="form-control" id="password" required>
-                        <div class="invalid-feedback">ketik password anda!</div>
-                    </div>
                 </div>
                     
-                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
@@ -237,6 +236,7 @@
             columns: [
                 {data: 'cek',className: "text-center", orderable: false, searchable: false},
                 {data: 'DT_RowIndex'},
+                {data: 'foto',className: "text-center", orderable: false, searchable: false},
                 {data: 'nama'},
                 {data: 'email'},
                 {data: 'kel'},
@@ -257,22 +257,35 @@
         });
 
         function resetform(){
+            $('#id').val('');
             $('#fweb')[0].reset();
-            $('#id').val("");
             $("#tanggallahir").val(vTgl_sql);
-            $('#kel').val("").trigger('change');
-            $('#aktif').val("").trigger('change');
+            $('#kel').val("L").trigger('change');
+            $('#aktif').val("1").trigger('change');
+
+            let time = (new Date()).getTime();
+            let path = 'images/user-avatar.png?t='+time;
+            $("#fotoprofil").attr("src",path);
+
             $("#fweb").removeClass("was-validated");
         };
 
         function fillform(dt){
             $('#id').val(dt.id);
-            $('#grup').val(dt.grup);
-
-            var time = (new Date()).getTime();
-            $("#fotoprofil").attr("src","");
-
+            $('#nama').val(dt.nama);
+            $('#email').val(dt.email);
+            $('#tempatlahir').val(dt.tempatlahir);
+            $('#tanggallahir').val(dt.tanggallahir);
+            $('#alamat').val(dt.alamat);
+            $('#nohp').val(dt.nohp);
+            $('#kel').val(dt.kel).trigger('change');
             $('#aktif').val(dt.aktif).trigger('change');
+
+            let time = (new Date()).getTime();
+            let path = dt.foto;
+            if(dt.foto!=='images/user-avatar.png')
+                path = '{{ asset("storage")."/" }}'+dt.foto;
+            $("#fotoprofil").attr("src",path+'?t='+time);
         }
 
         function reloadTable() {
@@ -291,7 +304,7 @@
                 keyboard: false,
             });
             myModal.toggle();
-            $("#grup").focus();
+            $("#nama").focus();
         });
 
         //ganti
@@ -350,26 +363,27 @@
 
         $("#fweb").submit(function(e) {
             e.preventDefault();
-            var form = $("#fweb")[0];
-            let formVal = $(this).serialize();
+            var form = $(this)[0];
+            let formVal = new FormData(form);
+            formVal.append("foto", $("#foto")[0].files[0]); 
             let isValid = form.checkValidity();
-            if(isValid){
-                appAjax('{{ route("grup-create") }}', formVal).done(function(vRet) {
+            //if(isValid){
+                appAjaxUpload('{{ route("akun-create") }}', formVal).done(function(vRet) {
                     if(vRet.status){
-                        if(vRet.insert)
-                            resetform();
+                        //if(vRet.insert)
+                          //  resetform();
                         reloadTable();
-                        $("#grup").focus();
+                        $("#nama").focus();
                     }
                     showmymessage(vRet.messages,vRet.status);
                 });
-            }
+            //}
         });    
 
-        $(document).on('click','.gambardet',function(){
-            var time = (new Date()).getTime();
-            $("#fotoprofil").attr("src","");
-        });
+        //$(document).on('click','.gambardet',function(){
+          //  var time = (new Date()).getTime();
+          //  $("#fotoprofil").attr("src","");
+        //});
 
 </script>
 @endsection
