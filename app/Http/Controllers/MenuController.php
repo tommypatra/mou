@@ -83,10 +83,13 @@ class MenuController extends Controller
             $insert = false;
 
         $datapost = $this->validate($request, [
-            'menu' => 'required|min:3',
+            'grup_id' => 'required',
+            'modul_id' => 'required',
+            'urut' => 'required',
             'aktif' => 'required',
         ]);
-        $datapost['akun_id'] = auth()->user()->id;
+        if ($request['menu_id'])
+            $datapost['menu_id'] = $request['menu_id'];
         //dd($datapost);
         $retval['insert'] = $insert;
         try {
