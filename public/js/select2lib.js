@@ -2,9 +2,9 @@ function sel2_datalokal(vselector, vdata={}, vModal=null, vAllow=false, vTags=fa
   $(vselector).select2({
     data: vdata,
     placeholder: '- pilih -',
-    multiple: vAllow,
+    multiple: vTags,
     dropdownParent: $(vselector).parent(),
-    allowClear: vTags,
+    allowClear: vAllow,
   });
 }
 

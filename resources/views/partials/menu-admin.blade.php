@@ -9,16 +9,6 @@
           </a>
         </li>
         <li>
-          <a href="{{ route('grup') }}">
-            <i class="bi bi-circle"></i><span>Grup</span>
-          </a>
-        </li>
-        <li>
-          <a href="{{ route('grup') }}">
-            <i class="bi bi-circle"></i><span>Bagian Pengguna</span>
-          </a>
-        </li>
-        <li>
           <a href="{{ route('hakakses') }}">
             <i class="bi bi-circle"></i><span>Hak Akses</span>
           </a>
@@ -33,27 +23,32 @@
       </a>
       <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
         <li>
-          <a href="icons-bootstrap.html">
+          <a href="{{ route('grup') }}">
+            <i class="bi bi-circle"></i><span>Grup</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('bagian') }}">
             <i class="bi bi-circle"></i><span>Bagian</span>
           </a>
         </li>
         <li>
-          <a href="icons-bootstrap.html">
+          <a href="{{ route('jenis') }}">
             <i class="bi bi-circle"></i><span>Jenis</span>
           </a>
         </li>
         <li>
-          <a href="icons-remix.html">
+          <a href="{{ route('kategori') }}">
             <i class="bi bi-circle"></i><span>Kategori</span>
           </a>
         </li>
         <li>
-          <a href="icons-boxicons.html">
+          <a href="{{ route('modul') }}">
             <i class="bi bi-circle"></i><span>Modul</span>
           </a>
         </li>
         <li>
-          <a href="icons-boxicons.html">
+          <a href="{{ route('menu') }}">
             <i class="bi bi-circle"></i><span>Menu</span>
           </a>
         </li>

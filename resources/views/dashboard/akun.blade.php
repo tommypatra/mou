@@ -40,6 +40,11 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
+
+                {{-- @foreach($data as $label)
+                    {{ $label." " }}
+                @endforeach --}}
+
                 <table class="table table-bordered datatable">
                     <thead>
                         <tr>
@@ -51,6 +56,7 @@
                             <th>Jenis Kelamin</th>
                             <th>Alamat</th>
                             <th>HP</th>
+                            <th>Bagian</th>
                             <th>Grup</th>
                             <th>Status</th>
                             <th></th>
@@ -66,7 +72,7 @@
     </div>
 </div>
 
-
+<!-- MULAI MODAL FORM AKUN -->
 <div class="modal fade" id="modal-form-web" role="dialog">
     <div class="modal-dialog modal-lg">
         <form id="fweb" class="row g-3 needs-validation" novalidate>
@@ -166,6 +172,29 @@
     </div>
 </div>
 
+<!-- MULAI MODAL PENGATURAN -->
+<div class="modal fade" id="modal-atur" role="dialog">
+    <div class="modal-dialog">
+        <form id="fatur" class="row g-3 needs-validation" novalidate>
+            @csrf
+            <input type="hidden" name="akunid" id="akunid">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">FORM PENGATURAN</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body ">
+                    <div id="html-atur"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- AKHIR MODAL PENGATURAN GRUP -->
+
 @endsection
 
 @section("scriptJs")
@@ -178,6 +207,7 @@
 
     <script>
         sel2_jeniskelamin("#kel");
+        sel2_jeniskelamin("#kel2");
         sel2_aktif2("#aktif");
 
         resetform();
@@ -215,33 +245,34 @@
                     extend: 'copyHtml5',
                     title : $(document).attr('title'),
                     exportOptions: {
-                        columns: [1,2,3,4,5,6]
+                        columns: [1,3,4,5,6,7]
                     }
                 },
                 {
                     extend: 'excelHtml5',
                     title : $(document).attr('title'),
                     exportOptions: {
-                        columns: [1,2,3,4,5,6]
+                        columns: [1,3,4,5,6,7]
                     }
                 },
                 {
                     extend: 'print',
                     title : $(document).attr('title'),
                     exportOptions: {
-                        columns: [1,2,3,4,5,6]
+                        columns: [1,3,4,5,6,7]
                     }
                 },        
             ],
             columns: [
                 {data: 'cek',className: "text-center", orderable: false, searchable: false},
-                {data: 'DT_RowIndex'},
+                {data: 'no'},
                 {data: 'foto',className: "text-center", orderable: false, searchable: false},
                 {data: 'nama'},
                 {data: 'email'},
                 {data: 'kel'},
                 {data: 'alamat'},
                 {data: 'nohp'},
+                {data: 'bagian'},
                 {data: 'grup'},
                 {data: 'aktif' },
                 {data: 'action', className: "text-center", orderable: false, searchable: false},
@@ -312,18 +343,138 @@
             resetform();
             var formVal={_token:$("input[name=_token]").val(),id:$(this).data("id")};
             appAjax("{{ route('akun-update') }}", formVal).done(function(vRet) {
-                 if(vRet.status){
+                if(vRet.status){
                     var myModal = new bootstrap.Modal(document.getElementById('modal-form-web'), {
                         backdrop: 'static',
                         keyboard: false,
                     });
                     myModal.toggle();
                     fillform(vRet.data);
-                 }else{
+                }else{
                     showmymessage(vRet.messages,vRet.status);
-                 }
+                }
             });
-        })
+        });
+
+        //atur bagian
+        function databagian(id){
+            let formVal={_token:$("input[name=_token]").val(),id:id};
+            appAjax("{{ route('akun-bagian') }}", formVal).done(function(vRet) {
+                if(vRet.status){
+                    $("#html-atur").html(vRet.html);
+                }
+            });
+        }
+
+        $(document).on("click",".btn-atur-bagian",function(){
+            let id=$(this).data("id");
+            $("#akunid").val(id);
+            var myModal = new bootstrap.Modal(document.getElementById('modal-atur'), {
+                        backdrop: 'static',
+                        keyboard: false,
+            });
+            myModal.toggle();
+            databagian($("#akunid").val());
+        });
+
+        //atur grup
+        function datagrup(id){
+            let formVal={_token:$("input[name=_token]").val(),id:id};
+            appAjax("{{ route('akun-grup') }}", formVal).done(function(vRet) {
+                if(vRet.status){
+                    $("#html-atur").html(vRet.html);
+                }
+            });
+        }
+
+        $(document).on("click",".btn-atur-grup",function(){
+            let id=$(this).data("id");
+            $("#akunid").val(id);
+            var myModal = new bootstrap.Modal(document.getElementById('modal-atur'), {
+                        backdrop: 'static',
+                        keyboard: false,
+            });
+            myModal.toggle();
+            datagrup($("#akunid").val());
+        });
+
+        $(document).on("click",".cekbagian",function(){
+            let formVal={
+                _token:$("input[name=_token]").val(),
+                cek:$(this).is(":checked"),
+                jenis:'bagian',
+                bagianid:$(this).data("id"),
+                akunid:$("#akunid").val(),
+                bagianakunid:$(this).data('bagianakunid'),                
+            };
+            //if(confirm("apakah anda yakin?")){                
+                appAjax("{{ route('akun-atur') }}", formVal).done(function(vRet) {
+                    if(vRet.status){
+                        databagian($("#akunid").val());
+                        reloadTable();
+                    }
+                    showmymessage(vRet.messages,vRet.status);
+                });
+            //}
+        });
+
+        $(document).on("click",".cekbagianstatus",function(){
+            let formVal={
+                _token:$("input[name=_token]").val(),
+                cek:$(this).is(":checked"),
+                jenis:'bagianstatus',
+                bagianakunid:$(this).data("id"),
+            };
+            //if(confirm("apakah anda yakin?")){                
+                appAjax("{{ route('akun-atur') }}", formVal).done(function(vRet) {
+                    if(vRet.status){
+                        databagian($("#akunid").val());
+                        reloadTable();
+                    }
+                    showmymessage(vRet.messages,vRet.status);
+                });
+            //}
+        });
+
+        // untuk grup        
+        $(document).on("click",".cekgrup",function(){
+            let formVal={
+                _token:$("input[name=_token]").val(),
+                cek:$(this).is(":checked"),
+                jenis:'grup',
+                grupid:$(this).data("id"),
+                akunid:$("#akunid").val(),
+                penggunaid:$(this).data('penggunaid'),                
+            };
+            //if(confirm("apakah anda yakin?")){                
+                appAjax("{{ route('akun-atur') }}", formVal).done(function(vRet) {
+                    if(vRet.status){
+                        datagrup($("#akunid").val());
+                        reloadTable();
+                    }
+                    showmymessage(vRet.messages,vRet.status);
+                });
+            //}
+        });
+
+        $(document).on("click",".cekgrupstatus",function(){
+            let formVal={
+                _token:$("input[name=_token]").val(),
+                cek:$(this).is(":checked"),
+                jenis:'grupstatus',
+                penggunaid:$(this).data("id"),
+            };
+            //if(confirm("apakah anda yakin?")){                
+                appAjax("{{ route('akun-atur') }}", formVal).done(function(vRet) {
+                    if(vRet.status){
+                        datagrup($("#akunid").val());
+                        reloadTable();
+                    }
+                    showmymessage(vRet.messages,vRet.status);
+
+                });
+            //}
+        });
 
         //--- mulai hapus ---
         //mengecek semua ceklist
@@ -367,17 +518,17 @@
             let formVal = new FormData(form);
             formVal.append("foto", $("#foto")[0].files[0]); 
             let isValid = form.checkValidity();
-            //if(isValid){
+            if(isValid){
                 appAjaxUpload('{{ route("akun-create") }}', formVal).done(function(vRet) {
                     if(vRet.status){
-                        //if(vRet.insert)
-                          //  resetform();
+                        if(vRet.insert)
+                            resetform();
                         reloadTable();
                         $("#nama").focus();
                     }
                     showmymessage(vRet.messages,vRet.status);
                 });
-            //}
+            }
         });    
 
         //$(document).on('click','.gambardet',function(){

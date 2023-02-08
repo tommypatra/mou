@@ -3,16 +3,18 @@
 @section('head')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" type="text/css" href="plugins/datatables/datatables.min.css"/>
+    <link rel="stylesheet" type="text/css" href="plugins/select2-to-tree/src/select2totree.css"/>
+    
 @endsection
 
 @section('pagetitle')
     <div class="pagetitle">
-        <h1>Grup</h1>
+        <h1>Menu</h1>
         <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('login') }}">Home</a></li>
             <li class="breadcrumb-item">Akun</li>
-            <li class="breadcrumb-item active">Grup</li>
+            <li class="breadcrumb-item active">Menu</li>
         </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -23,7 +25,7 @@
 <div class="col-lg-12">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center mb-3">            
-            <h3 class="card-title d-flex">Data Grup</h3>
+            <h3 class="card-title d-flex">Data Menu</h3>
             <div class="list-inline d-flex">
                 <div class="buttons">
                     <a href="#" class="btn icon btn-primary btn-tambah"><i class="bi bi-plus-circle"></i></a>
@@ -36,16 +38,14 @@
                 <table class="table table-bordered datatable">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" class="cekSemua"></th>
                             <th>No</th>
                             <th>Grup</th>
+                            <th>Menu</th>
                             <th>Status</th>
-                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
-                <button class="btn btn-danger hapusTerpilih"><i class="bi bi-trash"></i> Hapus Terpilih</button>
             </div>
         </div>
     </div>
@@ -64,11 +64,34 @@
                 <div class="modal-body">
 
                     <div class="row">
+                        <div class="col-4">
+                            <label for="grup_id" class="form-label">Grup</label>
+                            <select name="grup_id" id="grup_id" required>
+                            </select>
+                            <div class="invalid-feedback">pilih grup!</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-8">
-                            <label for="grup" class="form-label">Nama Grup</label>
+                            <label for="modul_id" class="form-label">Modul</label>
+                            <select name="modul_id" id="modul_id" required>
+                            </select>
+                            <div class="invalid-feedback">pilih modul!</div>
+                        </div>
+                        <div class="col-2">
+                            <label for="modul_id" class="form-label">Urut</label>
+                            <input type="number" name="urut" class="form-control" id="urut" required>
+                            <div class="invalid-feedback">masukan no urut!</div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="menu_id" class="form-label">Parent Menu</label>
                             <div class="input-group has-validation">
-                                <input type="text" name="grup" class="form-control" id="grup" required>
-                                <div class="invalid-feedback">Ketik grup anda!</div>
+                                <select name="menu_id" id="menu_id">
+                                </select>
                             </div>
                         </div>
 
@@ -92,21 +115,28 @@
 
 @section("scriptJs")
     <script type="text/javascript" src="plugins/datatables/datatables.min.js"></script>
-    <script src="js/select2lib.js"></script>
+    <script type="text/javascript" src="js/select2lib.js"></script>
+    <script type="text/javascript" src="plugins/select2-to-tree/src/select2totree.js"></script>
+    
     <script type="text/javascript">
 
         sel2_aktif2("#aktif");
+        sel2_datalokal("#grup_id",  {!! $dtgrp !!} , "#modal-form-web");
+        sel2_datalokal("#modul_id",  {!! $dtmodul !!} , "#modal-form-web");
+        sel2_datalokal("#menu_id",  {} , "#modal-form-web",true);
 
         var dtTable = $('.datatable').DataTable({
             processing: true,
             autoWidth: false,
             serverSide: true,
+            pageLength: 25,
+	        deferRender: true,            
             lengthMenu: [
                 [25, 50, 75, -1],
                 ["25", "50", "75", "Semua"]
             ],
             ajax: {
-                url: "{{ route('grup-read') }}",
+                url: "{{ route('menu-read') }}",
                 dataType: "json",
                 type: "POST",
                 data: function (d) {
@@ -144,11 +174,10 @@
                 },        
             ],
             columns: [
-                {data: 'cek',className: "text-center", orderable: false, searchable: false},
-                {data: 'no'},
-                {data: 'grup'},
-                {data: 'aktif', },
-                {data: 'action', className: "text-center", orderable: false, searchable: false},
+                {data: 'no', width:"3%",},
+                {data: 'grup', width:"20%",},
+                {data: 'dtmenu'},
+                {data: 'aktif', width:"3%", },
             ],
             initComplete: function (e) {
                 var api = this.api();
@@ -163,13 +192,15 @@
         function resetform(){
             $('#fweb')[0].reset();
             $('#id').val("");
+            $('#grup_id').val("").trigger('change');
+            $('#modul_id').val("").trigger('change');
             $('#aktif').val("1").trigger('change');
             $("#fweb").removeClass("was-validated");
         };
 
         function fillform(dt){
             $('#id').val(dt.id);
-            $('#grup').val(dt.grup);
+            $('#menu').val(dt.menu);
             $('#aktif').val(dt.aktif).trigger('change');
         }
 
@@ -189,38 +220,29 @@
                 keyboard: false,
             });
             myModal.toggle();
-            $("#grup").focus();
+            $("#menu").focus();
         });
 
-        //ganti
-        $(document).on("click",".btn-ganti",function(){
-            resetform();
-            var formVal={_token:$("input[name=_token]").val(),id:$(this).data("id")};
-            appAjax("{{ route('grup-update') }}", formVal).done(function(vRet) {
-                 if(vRet.status){
-                    var myModal = new bootstrap.Modal(document.getElementById('modal-form-web'), {
-                        backdrop: 'static',
-                        keyboard: false,
+        $('#grup_id').on("change", function(e) { 
+            let vid =$(this).val();
+            let formVal={_token:$("input[name=_token]").val(),id:vid};
+            //$("#menu_id").select2('data', null);
+            $('#menu_id').empty();
+            if(vid>0){
+                appAjax("{{ route('menu-search') }}", formVal).done(function(vRet) {
+                    $("#menu_id").append($('<option>', {value:'', text: ''}));
+                    $.each( vRet.data, function( key, dp ) {
+                        $("#menu_id").append($('<option>', {value:dp.id, text: dp.text}));
                     });
-                    myModal.toggle();
-                    fillform(vRet.data);
-                 }else{
-                    showmymessage(vRet.messages,vRet.status);
-                 }
-            });
+                });
+            }
         })
-
-        //--- mulai hapus ---
-        //mengecek semua ceklist
-        $(".cekSemua").change(function () {
-            $(".cekbaris").prop('checked', $(this).prop("checked"));
-        });
 
         //fungsi umum menghapus
         function hapus(idTerpilih){
             var formVal={_token:$("input[name=_token]").val(),id:idTerpilih};
             if(idTerpilih.length > 0 && confirm("apakah anda yakin?")){
-                appAjax("{{ route('grup-delete') }}", formVal).done(function(vRet) {
+                appAjax("{{ route('menu-delete') }}", formVal).done(function(vRet) {
                     if(vRet.status){
                         reloadTable();
                     }
@@ -234,30 +256,18 @@
             hapus([$(this).data("id")]);
         })
 
-        //menghapus banyak data dari ceklist datatables 	
-        $(".hapusTerpilih").click(function () {
-            let idTerpilih = [];
-            $('.cekbaris').each(function (i) {
-                if ($(this).is(':checked')) {
-                    idTerpilih.push($(this).val());
-                }
-            });                
-            hapus(idTerpilih);
-        })
-        //--- akhir hapus ---
-
         $("#fweb").submit(function(e) {
             e.preventDefault();
             var form = $("#fweb")[0];
             let formVal = $(this).serialize();
             let isValid = form.checkValidity();
             if(isValid){
-                appAjax('{{ route("grup-create") }}', formVal).done(function(vRet) {
+                appAjax('{{ route("menu-create") }}', formVal).done(function(vRet) {
                     if(vRet.status){
                         if(vRet.insert)
                             resetform();
                         reloadTable();
-                        $("#grup").focus();
+                        $("#menu").focus();
                     }
                     showmymessage(vRet.messages,vRet.status);
                 });

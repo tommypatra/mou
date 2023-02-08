@@ -19,6 +19,7 @@ class CreateBagianAkunsTable extends Migration
             $table->foreignId("bagian_id");
             $table->enum("aktif", ["0", "1"])->default("1");
             $table->timestamps();
+            $table->unique(['akun_id', 'bagian_id']);
             $table->foreign("akun_id")->references("id")->on("akuns")->cascadeOnUpdate();
             $table->foreign("bagian_id")->references("id")->on("bagians")->cascadeOnUpdate();
         });

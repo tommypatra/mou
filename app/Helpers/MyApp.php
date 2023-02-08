@@ -37,7 +37,7 @@ class MyApp
         return collect($groups);
     }
 
-    public function buildTree(array $elements, $parentId = null, $id = "id", $idp = "idparent")
+    public function buildTree(array $elements, $parentId = null, $id = "id", $idp = "parent_id", $cld = "children")
     {
         $branch = [];
         foreach ($elements as $element) {
@@ -46,12 +46,26 @@ class MyApp
                 //die;
                 $children = MyApp::buildTree($elements, $element[$id], $id, $idp);
                 if ($children) {
-                    $element['children'] = $children;
+                    $element[$cld] = $children;
                 }
                 $branch[] = $element;
             }
         }
-
         return $branch;
+    }
+
+    function buildMenu($array, &$menu = "")
+    {
+        $menu .= '<ul>';
+        foreach ($array as $item) {
+            $menu .= '<li>';
+            $menu .= '<a href="' . $item['modul']['link'] . '">' . $item['modul']['menu'] . '</a>';
+            if (isset($item['children'])) {
+                MyApp::buildMenu($item['children'], $menu);
+            }
+            $menu .= '</li>';
+        }
+        $menu .= '</ul>';
+        return $menu;
     }
 }

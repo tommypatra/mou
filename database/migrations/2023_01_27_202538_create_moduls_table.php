@@ -19,7 +19,7 @@ class CreateModulsTable extends Migration
             $table->string("link", 200)->nullable();
             $table->string("icon", 50)->nullable();
             $table->string("deskripsi", 300)->nullable();
-            $table->enum("aktif", ["0", "1"])->default("0");
+            $table->enum("aktif", ["0", "1"])->default("1");
             $table->timestamps();
         });
     }

@@ -20,7 +20,7 @@
   <!-- Vendor CSS Files -->
   @include('partials.rescss') 
   @yield('head')
-
+  <link href="css/myapp.css" rel="stylesheet">
   <!-- =======================================================
   * Template Name: NiceAdmin - v2.5.0
   * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/

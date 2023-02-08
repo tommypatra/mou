@@ -20,6 +20,7 @@
   <!-- Vendor CSS Files -->
   @include('partials.rescss') 
   @yield('head')
+  <link href="css/myapp.css" rel="stylesheet">
 
 
   <!-- =======================================================

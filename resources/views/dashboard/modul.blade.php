@@ -7,12 +7,12 @@
 
 @section('pagetitle')
     <div class="pagetitle">
-        <h1>Grup</h1>
+        <h1>Modul</h1>
         <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('login') }}">Home</a></li>
             <li class="breadcrumb-item">Akun</li>
-            <li class="breadcrumb-item active">Grup</li>
+            <li class="breadcrumb-item active">Modul</li>
         </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -23,7 +23,7 @@
 <div class="col-lg-12">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center mb-3">            
-            <h3 class="card-title d-flex">Data Grup</h3>
+            <h3 class="card-title d-flex">Data Modul</h3>
             <div class="list-inline d-flex">
                 <div class="buttons">
                     <a href="#" class="btn icon btn-primary btn-tambah"><i class="bi bi-plus-circle"></i></a>
@@ -38,7 +38,10 @@
                         <tr>
                             <th><input type="checkbox" class="cekSemua"></th>
                             <th>No</th>
-                            <th>Grup</th>
+                            <th>Modul</th>
+                            <th>Link</th>
+                            <th>Icon</th>
+                            <th>Deskripsi</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -65,10 +68,35 @@
 
                     <div class="row">
                         <div class="col-8">
-                            <label for="grup" class="form-label">Nama Grup</label>
+                            <label for="menu" class="form-label">Menu</label>
                             <div class="input-group has-validation">
-                                <input type="text" name="grup" class="form-control" id="grup" required>
-                                <div class="invalid-feedback">Ketik grup anda!</div>
+                                <input type="text" name="menu" class="form-control" id="menu" required>
+                                <div class="invalid-feedback">Ketik menu anda!</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <label for="link" class="form-label">Link</label>
+                            <div class="input-group has-validation">
+                                <input type="text" name="link" class="form-control" id="link" required>
+                                <div class="invalid-feedback">Ketik link anda!</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="deskripsi" class="form-label">Deskripsi</label>
+                            <div class="input-group has-validation">
+                                <textarea row="3" name="deskripsi" class="form-control" id="deskripsi"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="icon" class="form-label">Icon</label>
+                            <div class="input-group has-validation">
+                                <input type="text" name="icon" class="form-control" id="icon" required>
+                                <div class="invalid-feedback">Ketik icon anda!</div>
                             </div>
                         </div>
 
@@ -79,6 +107,8 @@
                             <div class="invalid-feedback">pilih status aktif!</div>
                         </div>
                     </div>
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -106,7 +136,7 @@
                 ["25", "50", "75", "Semua"]
             ],
             ajax: {
-                url: "{{ route('grup-read') }}",
+                url: "{{ route('modul-read') }}",
                 dataType: "json",
                 type: "POST",
                 data: function (d) {
@@ -146,7 +176,10 @@
             columns: [
                 {data: 'cek',className: "text-center", orderable: false, searchable: false},
                 {data: 'no'},
-                {data: 'grup'},
+                {data: 'menu'},
+                {data: 'link'},
+                {data: 'icon'},
+                {data: 'deskripsi'},
                 {data: 'aktif', },
                 {data: 'action', className: "text-center", orderable: false, searchable: false},
             ],
@@ -169,7 +202,10 @@
 
         function fillform(dt){
             $('#id').val(dt.id);
-            $('#grup').val(dt.grup);
+            $('#menu').val(dt.menu);
+            $('#link').val(dt.link);
+            $('#icon').val(dt.icon);
+            $('#deskripsi').val(dt.deskripsi);
             $('#aktif').val(dt.aktif).trigger('change');
         }
 
@@ -189,14 +225,14 @@
                 keyboard: false,
             });
             myModal.toggle();
-            $("#grup").focus();
+            $("#menu").focus();
         });
 
         //ganti
         $(document).on("click",".btn-ganti",function(){
             resetform();
             var formVal={_token:$("input[name=_token]").val(),id:$(this).data("id")};
-            appAjax("{{ route('grup-update') }}", formVal).done(function(vRet) {
+            appAjax("{{ route('modul-update') }}", formVal).done(function(vRet) {
                  if(vRet.status){
                     var myModal = new bootstrap.Modal(document.getElementById('modal-form-web'), {
                         backdrop: 'static',
@@ -220,7 +256,7 @@
         function hapus(idTerpilih){
             var formVal={_token:$("input[name=_token]").val(),id:idTerpilih};
             if(idTerpilih.length > 0 && confirm("apakah anda yakin?")){
-                appAjax("{{ route('grup-delete') }}", formVal).done(function(vRet) {
+                appAjax("{{ route('modul-delete') }}", formVal).done(function(vRet) {
                     if(vRet.status){
                         reloadTable();
                     }
@@ -252,12 +288,12 @@
             let formVal = $(this).serialize();
             let isValid = form.checkValidity();
             if(isValid){
-                appAjax('{{ route("grup-create") }}', formVal).done(function(vRet) {
+                appAjax('{{ route("modul-create") }}', formVal).done(function(vRet) {
                     if(vRet.status){
                         if(vRet.insert)
                             resetform();
                         reloadTable();
-                        $("#grup").focus();
+                        $("#menu").focus();
                     }
                     showmymessage(vRet.messages,vRet.status);
                 });

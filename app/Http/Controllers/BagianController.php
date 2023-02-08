@@ -4,23 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\Grup;
-use App\Models\Pengguna;
 use DataTables;
+use App\Models\Bagian;
 
-class GrupController extends Controller
+
+class BagianController extends Controller
 {
-
     public function index()
     {
-        return view('dashboard.grup');
+        return view('dashboard.bagian');
     }
 
     public function read()
     {
         DB::statement(DB::raw('set @rownum=0'));
-        $data = Grup::select(DB::raw('@rownum := @rownum + 1 AS no'), 'grups.id', 'grups.grup', 'grups.aktif');
-
+        $data = Bagian::select(DB::raw('@rownum := @rownum + 1 AS no'), 'id', 'bagian', 'aktif')->get();
         return Datatables::of($data)->addIndexColumn()
             ->editColumn('aktif', function ($row) {
                 return ($row->aktif) ? "Aktif" : "Tidak Aktif";
@@ -49,7 +47,7 @@ class GrupController extends Controller
             $insert = false;
 
         $datapost = $this->validate($request, [
-            'grup' => 'required|min:3',
+            'bagian' => 'required|min:3',
             'aktif' => 'required',
         ]);
         $datapost['akun_id'] = auth()->user()->id;
@@ -58,9 +56,9 @@ class GrupController extends Controller
         try {
             DB::beginTransaction();
             if ($insert)
-                $id = Grup::create($datapost)->id;
+                $id = Bagian::create($datapost)->id;
             else {
-                $cari = Grup::where("id", $request['id'])->first();
+                $cari = Bagian::where("id", $request['id'])->first();
                 $cari->update($datapost);
             }
             $retval["status"] = true;
@@ -77,7 +75,7 @@ class GrupController extends Controller
     {
         $retval = array("status" => false, "messages" => ["maaf, data tidak ditemukan"], "data" => []);
         try {
-            $data = Grup::where('id', $request['id'])->first();
+            $data = Bagian::where('id', $request['id'])->first();
             if ($data)
                 $retval = array("status" => true, "messages" => ["data ditemukan"], "data" => $data);
         } catch (\Throwable $e) {
@@ -91,7 +89,7 @@ class GrupController extends Controller
         $retval = array("status" => false, "messages" => ["maaf, gagal dilakukan"]);
         try {
             $ids = $request['id'];
-            Grup::whereIn('id', $ids)->delete();
+            Bagian::whereIn('id', $ids)->delete();
             $retval = array("status" => true, "messages" => ["data berhasil dihapus"]);
         } catch (\Throwable $e) {
             $retval['messages'] = [$e->getMessage()];

@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
 
     public function run()
     {
-        $jumdata = 30;
+        $jumdata = 50;
 
         //nilai default grup
         $dtdef = [
@@ -107,7 +107,7 @@ class DatabaseSeeder extends Seeder
         }
 
         //loop 30 user id random untuk bagian nya
-        for ($i = 1; $i <= ($jumdata + 1); $i++)
+        for ($i = 2; $i <= ($jumdata + 1); $i++)
             for ($j = 1; $j <= rand(1, 13); $j++) {
                 BagianAkun::create([
                     'akun_id' => $i,
@@ -139,17 +139,18 @@ class DatabaseSeeder extends Seeder
 
         //nilai default modul
         $dtdef = [
-            ['menu' => 'Kerja Sama', 'link' => '{{ kerjasama.lnk }}', 'icon' => '<i class="bi bi-hdd-network"></i>'],
-            ['menu' => 'Pihak', 'link' => '{{ pihak.lnk }}', 'icon' => '<i class="bi bi-journal-text"></i>'],
-            ['menu' => 'Akun', 'link' => '#', 'icon' => '<i class="bi bi-people"></i>'],
-            ['menu' => 'Grup', 'link' => '{{ akun-grup.lnk }}', 'icon' => '<i class="bi bi-circle"></i>'],
-            ['menu' => 'Hak Akses', 'link' => '{{ akses-grup.lnk }}', 'icon' => '<i class="bi bi-circle"></i>'],
-            ['menu' => 'Daftar Pengguna', 'link' => '{{ pengguna-grup.lnk }}', 'icon' => '<i class="bi bi-circle"></i>'],
-            ['menu' => 'Referensi', 'link' => '#', 'icon' => '<i class="bi bi-collection"></i>'],
-            ['menu' => 'Jenis', 'link' => '{{ jenis-referensi.lnk }}', 'icon' => '<i class="bi bi-circle"></i>'],
-            ['menu' => 'Kategori', 'link' => '{{ kategori-referensi.lnk }}', 'icon' => '<i class="bi bi-circle"></i>'],
-            ['menu' => 'Modul', 'link' => '{{ modul-referensi.lnk }}', 'icon' => '<i class="bi bi-circle"></i>'],
-            ['menu' => 'Menu', 'link' => '{{ menu-referensi.lnk }}', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Kerja Sama', 'link' => '/kerjasama', 'icon' => '<i class="bi bi-hdd-network"></i>'], //1
+            ['menu' => 'Pihak', 'link' => '/pihak', 'icon' => '<i class="bi bi-journal-text"></i>'],
+            ['menu' => 'Akun', 'link' => '#', 'icon' => '<i class="bi bi-people"></i>'], //3
+            ['menu' => 'Daftar Pengguna', 'link' => '/akun', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Hak Akses', 'link' => '/hakakses', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Referensi', 'link' => '#', 'icon' => '<i class="bi bi-collection"></i>'], //6
+            ['menu' => 'Grup', 'link' => '/grup', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Bagian', 'link' => '/bagian', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Jenis', 'link' => '/jenis', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Kategori', 'link' => '/kategori', 'icon' => '<i class="bi bi-circle"></i>'], //10
+            ['menu' => 'Modul', 'link' => '/modul', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Menu', 'link' => '/menu', 'icon' => '<i class="bi bi-circle"></i>'], //12
         ];
         foreach ($dtdef as $i => $dt) {
             Modul::create([
@@ -166,15 +167,15 @@ class DatabaseSeeder extends Seeder
             ['grup_id' => '1', 'urut' => 3, 'modul_id' => '3', 'menu_id' => null],
             ['grup_id' => '1', 'urut' => 4, 'modul_id' => '4', 'menu_id' => 3],
             ['grup_id' => '1', 'urut' => 5, 'modul_id' => '5', 'menu_id' => 3],
-            ['grup_id' => '1', 'urut' => 6, 'modul_id' => '6', 'menu_id' => 3],
-            ['grup_id' => '1', 'urut' => 7, 'modul_id' => '7', 'menu_id' => null],
-            ['grup_id' => '1', 'urut' => 8, 'modul_id' => '8', 'menu_id' => 7],
-            ['grup_id' => '1', 'urut' => 9, 'modul_id' => '9', 'menu_id' => 7],
-            ['grup_id' => '1', 'urut' => 10, 'modul_id' => '10', 'menu_id' => 7],
-            ['grup_id' => '1', 'urut' => 11, 'modul_id' => '11', 'menu_id' => 7],
+            ['grup_id' => '1', 'urut' => 6, 'modul_id' => '6', 'menu_id' => null],
+            ['grup_id' => '1', 'urut' => 7, 'modul_id' => '7', 'menu_id' => 6],
+            ['grup_id' => '1', 'urut' => 8, 'modul_id' => '8', 'menu_id' => 6],
+            ['grup_id' => '1', 'urut' => 9, 'modul_id' => '9', 'menu_id' => 6],
+            ['grup_id' => '1', 'urut' => 10, 'modul_id' => '10', 'menu_id' => 6],
+            ['grup_id' => '1', 'urut' => 11, 'modul_id' => '11', 'menu_id' => 6],
+            ['grup_id' => '1', 'urut' => 12, 'modul_id' => '12', 'menu_id' => 6],
             ['grup_id' => '2', 'urut' => 1, 'modul_id' => '1', 'menu_id' => null],
             ['grup_id' => '2', 'urut' => 2, 'modul_id' => '2', 'menu_id' => null],
-            ['grup_id' => '2', 'urut' => 3, 'modul_id' => '3', 'menu_id' => null],
         ];
         foreach ($dtdef as $i => $dt) {
             Menu::create([
