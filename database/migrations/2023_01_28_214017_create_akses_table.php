@@ -15,16 +15,15 @@ class CreateAksesTable extends Migration
     {
         Schema::create('akses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId("modul_id");
-            $table->foreignId("grup_id");
+            $table->foreignId("menu_id");
             $table->enum("c", ["0", "1"])->default("0");
-            $table->enum("r", ["0", "1"])->default("0");
+            $table->enum("r", ["0", "1"])->default("1");
             $table->enum("u", ["0", "1"])->default("0");
             $table->enum("d", ["0", "1"])->default("0");
             $table->enum("s", ["0", "1"])->default("0");
             $table->timestamps();
-            $table->foreign("modul_id")->references("id")->on("moduls")->onUpdate("cascade");
-            $table->foreign("grup_id")->references("id")->on("grups")->onUpdate("cascade");
+            $table->unique('menu_id');
+            $table->foreign("menu_id")->references("id")->on("menus")->onUpdate("cascade");
         });
     }
 

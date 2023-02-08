@@ -10,11 +10,6 @@ class Grup extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function Akses()
-    {
-        return $this->hasMany(Akses::class);
-    }
-
     public function Pengguna()
     {
         return $this->hasMany(Pengguna::class);

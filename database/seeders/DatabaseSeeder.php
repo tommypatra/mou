@@ -14,6 +14,7 @@ use App\Models\Bagian;
 use App\Models\Kategori;
 use App\Models\Pengguna;
 use App\Models\Provinsi;
+use App\Models\Akses;
 
 use App\Models\Kabupaten;
 use App\Models\BagianAkun;
@@ -185,6 +186,35 @@ class DatabaseSeeder extends Seeder
                 'urut' => $dt['urut'],
             ]);
         }
+
+        //nilai default akses
+        $dtdef = [
+            ['menu_id' => '1', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '2', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '3', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '4', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '5', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '6', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '7', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '8', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '9', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '10', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '11', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '12', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '13', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '0',],
+            ['menu_id' => '14', 'c' => '0', 'r' => '1', 'u' => '0', 'd' => '0', 's' => '0',],
+        ];
+        foreach ($dtdef as $i => $dt) {
+            Akses::create([
+                'menu_id' => $dt['menu_id'],
+                'c' => $dt['c'],
+                'r' => $dt['r'],
+                'u' => $dt['u'],
+                'd' => $dt['d'],
+                's' => $dt['s'],
+            ]);
+        }
+
 
         //nilai default provinsi
         $dtdef = [

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use DataTables;
 use App\Models\Grup;
 use App\Models\Menu;
+use App\Models\Akses;
 use App\Models\Modul;
 
 
@@ -94,9 +95,20 @@ class MenuController extends Controller
         $retval['insert'] = $insert;
         try {
             DB::beginTransaction();
-            if ($insert)
+            if ($insert) {
                 $id = Menu::create($datapost)->id;
-            else {
+
+                $datapost = [
+                    'grup_id' => $datapost['grup_id'],
+                    'menu_id' => $id,
+                    'c' => '1',
+                    'r' => '0',
+                    'u' => '0',
+                    'd' => '0',
+                    's' => '0',
+                ];
+                Akses::create($datapost);
+            } else {
                 $cari = Menu::where("id", $request['id'])->first();
                 $cari->update($datapost);
             }

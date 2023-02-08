@@ -9,7 +9,7 @@
           </a>
         </li>
         <li>
-          <a href="{{ route('hakakses') }}">
+          <a href="{{ route('akses') }}">
             <i class="bi bi-circle"></i><span>Hak Akses</span>
           </a>
         </li>

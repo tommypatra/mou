@@ -5,11 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AkunController;
 use App\Http\Controllers\GrupController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\AksesController;
 use App\Http\Controllers\JenisController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ModulController;
 use App\Http\Controllers\BagianController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PendaftaranController;
 
@@ -99,7 +101,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/modul-update', [ModulController::class, 'update'])->name('modul-update');
         Route::post('/modul-delete', [ModulController::class, 'delete'])->name('modul-delete');
 
-        Route::get('/hakakses', [HakaksesController::class, 'index'])->name('hakakses');
+        //master akses
+        Route::get('/akses', [AksesController::class, 'index'])->name('akses');
+        Route::post('/akses-create', [AksesController::class, 'create'])->name('akses-create');
+        Route::post('/akses-read', [AksesController::class, 'read'])->name('akses-read');
+        Route::post('/akses-update', [AksesController::class, 'update'])->name('akses-update');
+        Route::post('/akses-delete', [AksesController::class, 'delete'])->name('akses-delete');
+
         Route::get('/pengguna', [PenggunaController::class, 'index'])->name('pengguna');
     });
 });

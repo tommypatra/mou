@@ -16,6 +16,11 @@ class Menu extends Model
         return $this->belongsTo(Grup::class);
     }
 
+    public function Akses()
+    {
+        return $this->hasOne(Akses::class);
+    }
+
     public function Modul()
     {
         return $this->belongsTo(Modul::class);

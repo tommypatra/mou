@@ -10,13 +10,8 @@ class Akses extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function Modul()
+    public function Menu()
     {
-        return $this->belongsTo(Modul::class);
-    }
-
-    public function Grup()
-    {
-        return $this->belongsTo(Grup::class);
+        return $this->belongsTo(Menu::class);
     }
 }
