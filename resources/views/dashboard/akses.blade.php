@@ -60,6 +60,7 @@
         <form id="fweb" class="row g-3 needs-validation" novalidate>
             @csrf
             <input type="hidden" name="id" id="id">
+            <input type="hidden" name="menu_id" id="menu_id">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">FORM APLIKASI</h5>
@@ -68,19 +69,46 @@
                 <div class="modal-body">
 
                     <div class="row">
-                        <div class="col-8">
-                            <label for="akses" class="form-label">Nama Akses</label>
-                            <div class="input-group has-validation">
-                                <input type="text" name="akses" class="form-control" id="akses" required>
-                                <div class="invalid-feedback">Ketik akses anda!</div>
-                            </div>
+                        <div class="col-6">
+                            <label for="grup" class="form-label" >Grup :</label>
+                            <div id="grup-caption"></div>
                         </div>
+                        <div class="col-6">
+                            <label for="menu" class="form-label" >Menu :</label>
+                            <div id="menu-caption"></div>
+                        </div>
+                    </div>
 
-                        <div class="col-4">
-                            <label for="aktif" class="form-label">Status</label>
-                            <select name="aktif" id="aktif" required>
-                            </select>
-                            <div class="invalid-feedback">pilih status aktif!</div>
+                    <div class="row">
+                        <div class="col-6 mt-3">
+                            <label for="grup" class="form-label" >Hak Akses :</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="checkbox" name="create" id="create" value="1"> Create 
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="checkbox" name="read" id="read" value="1"> Read 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="checkbox" name="update" id="update" value="1"> Update 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="checkbox" name="delete" id="delete" value="1"> Delete 
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="checkbox" name="special" id="special" value="1"> All 
                         </div>
                     </div>
                 </div>
@@ -191,17 +219,33 @@
             reloadTable();
         })
 
-        $(".btn-tambah").click(function(){
+        $(document).on("click",".btn-tambah",function(){
             resetform();
+            $("#menu_id").val($(this).data('id'));
+            $("#grup-caption").html($(this).data('grupcaption'));
+            $("#menu-caption").html($(this).data('menucaption'));
             var myModal = new bootstrap.Modal(document.getElementById('modal-form-web'), {
                 backdrop: 'static',
                 keyboard: false,
             });
             myModal.toggle();
-            $("#akses").focus();
         });
 
-        //ganti
+        //ganti akses pada datatables
+        $(document).on("click",".updakses",function(){
+            let formVal = {
+                _token:$("input[name=_token]").val(),
+                id:$(this).val(),
+                menu_id:$(this).data('menu_id'),
+                akses:$(this).data('akses'),
+                cek:$(this).is(":checked")
+            };
+            appAjax('{{ route("akses-create") }}', formVal).done(function(vRet) {
+                showmymessage(vRet.messages,vRet.status);
+            });
+
+        })
+
         $(document).on("click",".btn-ganti",function(){
             resetform();
             var formVal={_token:$("input[name=_token]").val(),id:$(this).data("id")};

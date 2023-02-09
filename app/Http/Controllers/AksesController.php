@@ -36,7 +36,7 @@ class AksesController extends Controller
                 $ret = '';
                 if (isset($row->akses)) {
                     $cek = ($row->akses->c == "1") ? "checked" : "";
-                    $ret = "<input type='checkbox' class='updakses' data-akses='c' value='" . $row->id . "' " . $cek . ">";
+                    $ret = "<input type='checkbox' class='updakses' data-akses='c' value='" . $row->akses->id . "' " . $cek . ">";
                 }
                 return $ret;
             })
@@ -44,7 +44,7 @@ class AksesController extends Controller
                 $ret = '';
                 if (isset($row->akses)) {
                     $cek = ($row->akses->r == "1") ? "checked" : "";
-                    $ret = "<input type='checkbox' class='updakses' data-akses='r' value='" . $row->id . "' " . $cek . ">";
+                    $ret = "<input type='checkbox' class='updakses' data-akses='r' value='" . $row->akses->id . "' " . $cek . ">";
                 }
                 return $ret;
             })
@@ -52,7 +52,7 @@ class AksesController extends Controller
                 $ret = '';
                 if (isset($row->akses)) {
                     $cek = ($row->akses->u == "1") ? "checked" : "";
-                    $ret = "<input type='checkbox' class='updakses' data-akses='u' value='" . $row->id . "' " . $cek . ">";
+                    $ret = "<input type='checkbox' class='updakses' data-akses='u' value='" . $row->akses->id . "' " . $cek . ">";
                 }
                 return $ret;
             })
@@ -60,7 +60,7 @@ class AksesController extends Controller
                 $ret = '';
                 if (isset($row->akses)) {
                     $cek = ($row->akses->d == "1") ? "checked" : "";
-                    $ret = "<input type='checkbox' class='updakses' data-akses='d' value='" . $row->id . "' " . $cek . ">";
+                    $ret = "<input type='checkbox' class='updakses' data-akses='d' value='" . $row->akses->id . "' " . $cek . ">";
                 }
                 return $ret;
             })
@@ -68,7 +68,7 @@ class AksesController extends Controller
                 $ret = '';
                 if (isset($row->akses)) {
                     $cek = ($row->akses->s == "1") ? "checked" : "";
-                    $ret = "<input type='checkbox' class='updakses' data-akses='s' value='" . $row->id . "' " . $cek . ">";
+                    $ret = "<input type='checkbox' class='updakses' data-akses='s' value='" . $row->akses->id . "' " . $cek . ">";
                 }
                 return $ret;
             })
@@ -81,7 +81,7 @@ class AksesController extends Controller
             ->addColumn('action', function ($row) {
                 $btn = '';
                 if (!isset($row->akses))
-                    $btn = '<button type="button" class="btn btn-sm btn-primary btn-tambah" data-id="' . $row->id . '"><i class="bi bi-plus-circle"></i></button>';
+                    $btn = '<button type="button" class="btn btn-sm btn-primary btn-tambah" data-menucaption="' . $row->modul->menu . '" data-grupcaption="' . $row->grup->grup . '" data-id="' . $row->id . '"><i class="bi bi-plus-circle"></i></button>';
                 else
                     $btn = '<button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="' . $row->akses->id . '"><i class="bi bi-trash3"></i></button>';
                 return $btn;
@@ -98,19 +98,24 @@ class AksesController extends Controller
         if ($request['id'])
             $insert = false;
 
-        $datapost = $this->validate($request, [
-            'grup' => 'required|min:3',
-            'aktif' => 'required',
-        ]);
-        $datapost['akun_id'] = auth()->user()->id;
-        //dd($datapost);
         $retval['insert'] = $insert;
         try {
             DB::beginTransaction();
-            if ($insert)
-                $id = Grup::create($datapost)->id;
-            else {
-                $cari = Grup::where("id", $request['id'])->first();
+            if ($insert) {
+                $datapost = [
+                    'menu_id' => $request['menu_id'],
+                    'c' => isset($request['create']) ? "1" : "0",
+                    'r' => isset($request['read']) ? "1" : "0",
+                    'u' => isset($request['update']) ? "1" : "0",
+                    'd' => isset($request['delete']) ? "1" : "0",
+                    's' => isset($request['special']) ? "1" : "0",
+                ];
+                $id = Akses::create($datapost)->id;
+            } else {
+                $datapost = array(
+                    $request['akses'] => ($request['cek'] == 'true') ? "1" : "0",
+                );
+                $cari = Akses::where("id", $request['id'])->first();
                 $cari->update($datapost);
             }
             $retval["status"] = true;
@@ -127,7 +132,7 @@ class AksesController extends Controller
     {
         $retval = array("status" => false, "messages" => ["maaf, data tidak ditemukan"], "data" => []);
         try {
-            $data = Grup::where('id', $request['id'])->first();
+            $data = Akses::where('id', $request['id'])->first();
             if ($data)
                 $retval = array("status" => true, "messages" => ["data ditemukan"], "data" => $data);
         } catch (\Throwable $e) {
@@ -141,7 +146,7 @@ class AksesController extends Controller
         $retval = array("status" => false, "messages" => ["maaf, gagal dilakukan"]);
         try {
             $ids = $request['id'];
-            Grup::whereIn('id', $ids)->delete();
+            Akses::whereIn('id', $ids)->delete();
             $retval = array("status" => true, "messages" => ["data berhasil dihapus"]);
         } catch (\Throwable $e) {
             $retval['messages'] = [$e->getMessage()];
