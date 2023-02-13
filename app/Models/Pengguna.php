@@ -13,22 +13,22 @@ class Pengguna extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function Akun()
+    public function akun()
     {
         return $this->belongsTo(Akun::class);
     }
 
-    public function Grup()
+    public function grup()
     {
         return $this->belongsTo(Grup::class);
     }
 
-    public function Mou()
+    public function mou()
     {
         return $this->hasMany(Mou::class);
     }
 
-    public function GetAkses()
+    public function getAkses()
     {
         return pengguna::with('akun')
             ->with('grup')
@@ -36,7 +36,7 @@ class Pengguna extends Model
             ->get();
     }
 
-    public function CekAdmin()
+    public function cekAdmin()
     {
         $retval = array("status" => false, "messages" => ["akses ditolak"]);
         foreach (session()->get('groups') as $dp) {
@@ -48,7 +48,7 @@ class Pengguna extends Model
         return json_encode($retval);
     }
 
-    public function CekPengguna()
+    public function cekPengguna()
     {
         $retval = array("status" => false, "messages" => ["akses ditolak"]);
         foreach (session()->get('groups') as $dp) {

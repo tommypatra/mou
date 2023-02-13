@@ -10,7 +10,7 @@ class Bagian extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function BagianAkun()
+    public function bagianAkun()
     {
         return $this->hasMany(BagianAkun::class);
     }

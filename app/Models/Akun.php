@@ -11,12 +11,12 @@ class Akun extends Authenticatable
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function Pengguna()
+    public function pengguna()
     {
         return $this->hasMany(Pengguna::class);
     }
 
-    public function BagianAkun()
+    public function bagianAkun()
     {
         return $this->hasMany(BagianAkun::class);
     }

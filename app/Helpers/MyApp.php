@@ -7,6 +7,98 @@ namespace App\Helpers;
 class MyApp
 {
 
+    public function decodeNIK($vdata = null)
+    {
+        $retval = [];
+        //inisiasi tahun sekarang
+        $thnskrng = date("Y");
+        //menyiapkan temporari tahun
+        $tmpthn = (int)substr($thnskrng, 0, 2);
+
+        $retval["prov"] = substr($vdata, 0, 2);
+        $retval["kab"] = substr($vdata, 2, 2);
+        $retval["kec"] = substr($vdata, 4, 2);
+
+        $tgl = (int)substr($vdata, 6, 2);
+        $bln = (int)substr($vdata, 8, 2);
+        $thn = (int)substr($vdata, 10, 2);
+
+        $thnlahir = ($tmpthn . $thn);
+        if ((int)$thnlahir > (int)$thnskrng) {
+            $thnlahir = ($tmpthn - 1) . $thn;
+        }
+
+        $retval["kel"] = "L";
+        if ($tgl > 40) {
+            $tgl = $tgl - 40;
+            $retval["kel"] = "P";
+        }
+        $retval["tgllahir"] = date("Y-m-d");
+        if (checkdate($bln, $tgl, $thnlahir))
+            $retval["tgllahir"] = $thnlahir . "-" . $bln . "-" . $tgl;
+        //echo $retval["tgllahir"];
+        //die;
+        return $retval;
+    }
+
+    public function allowheader($content_type = "application/json")
+    {
+        $allow = [
+            'mou.iainkendari.ac.id',
+        ];
+
+        //debug($_SERVER);
+        $http_origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : "https://mou.iainkendari.ac.id";
+        $web_origin = parse_url($http_origin);
+
+        Header("Access-Control-Allow-Origin: " . $http_origin);
+        Header("Access-Control-Allow-Headers: *");
+        header("Access-Control-Allow-Credentials: true");
+        Header("Access-Control-Allow-Methods: GET, POST");
+        header("Content-Type: " . $content_type . "; charset=utf-8");
+
+        $CI = get_instance();
+        //if (!in_array($web_origin['host'], $allow) || !$CI->input->is_ajax_request()) {
+        if (!in_array($web_origin['host'], $allow)) {
+            $retval = array("status" => false, "pesan" => ["tidak diperbolehkan"]);
+            die(json_encode(($retval)));
+        }
+    }
+
+    public function waktu_lalu($timestamp = null)
+    {
+        $waktu = "";
+        if ($timestamp) {
+            $phpdate = strtotime($timestamp);
+            $mysqldate = date('Y-m-d H:i:s', $phpdate);
+
+            $selisih = time() - strtotime($mysqldate);
+            $detik = $selisih;
+            $menit = round($selisih / 60);
+            $jam = round($selisih / 3600);
+            $hari = round($selisih / 86400);
+            $minggu = round($selisih / 604800);
+            $bulan = round($selisih / 2419200);
+            $tahun = round($selisih / 29030400);
+            if ($detik <= 60) {
+                $waktu = $detik . ' detik lalu';
+            } else if ($menit <= 60) {
+                $waktu = $menit . ' menit lalu';
+            } else if ($jam <= 24) {
+                $waktu = $jam . ' jam lalu';
+            } else if ($hari <= 7) {
+                $waktu = $hari . ' hari lalu';
+            } else if ($minggu <= 4) {
+                $waktu = $minggu . ' minggu lalu';
+            } else if ($bulan <= 12) {
+                $waktu = $bulan . ' bulan lalu';
+            } else {
+                $waktu = $tahun . ' tahun lalu';
+            }
+        }
+        return $waktu;
+    }
+
     public static function generateToken($length = 32)
     {
         $randomString = "";
@@ -54,7 +146,7 @@ class MyApp
         return $branch;
     }
 
-    function buildMenu($array, &$menu = "")
+    public function buildMenu($array, &$menu = "")
     {
         $menu .= '<ul>';
         foreach ($array as $item) {
@@ -67,5 +159,17 @@ class MyApp
         }
         $menu .= '</ul>';
         return $menu;
+    }
+
+    public function format_rupiah($vuang = 0, $vkoma = 0)
+    {
+        return number_format($vuang, $vkoma, ",", ".");
+    }
+
+    public function extractemail($email)
+    {
+        $retval = array();
+        preg_match("/^(.+)@([^\(\);:,<>]+\.[a-zA-Z]+)/", $email, $retval);
+        return $retval;
     }
 }

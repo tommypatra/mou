@@ -10,7 +10,7 @@ class Provinsi extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function Kabupaten()
+    public function kabupaten()
     {
         return $this->hasMany(Kabupaten::class);
     }

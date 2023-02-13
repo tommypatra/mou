@@ -11,12 +11,12 @@ class Kabupaten extends Model
 
     protected $guarded = ["id"];
 
-    public function Provinsi()
+    public function provinsi()
     {
         return $this->belongsTo(Provinsi::class);
     }
 
-    public function Pihak()
+    public function pihak()
     {
         return $this->hasMany(Pihak::class);
     }

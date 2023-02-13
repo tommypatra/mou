@@ -11,22 +11,22 @@ class Menu extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function Grup()
+    public function grup()
     {
         return $this->belongsTo(Grup::class);
     }
 
-    public function Akses()
+    public function akses()
     {
         return $this->hasOne(Akses::class);
     }
 
-    public function Modul()
+    public function modul()
     {
         return $this->belongsTo(Modul::class);
     }
 
-    public function Generate()
+    public function generate()
     {
         $dt = Menu::with(['modul'])->where('grup_id', '1')->orderBy('urut', 'asc')->get()->toArray();
         return \MyApp::buildTree($dt, null, "id", "menu_id");

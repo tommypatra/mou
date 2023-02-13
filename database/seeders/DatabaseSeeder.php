@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
 
     public function run()
     {
-        $jumdata = 50;
+        $jumdata = 100;
 
         //nilai default grup
         $dtdef = [

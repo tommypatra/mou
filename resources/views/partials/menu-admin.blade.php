@@ -52,5 +52,15 @@
             <i class="bi bi-circle"></i><span>Menu</span>
           </a>
         </li>
+        <li>
+          <a href="{{ route('kabupaten') }}">
+            <i class="bi bi-circle"></i><span>Kabupaten</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('provinsi') }}">
+            <i class="bi bi-circle"></i><span>Provinsi</span>
+          </a>
+        </li>
       </ul>
     </li><!-- End Icons Nav -->

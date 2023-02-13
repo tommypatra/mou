@@ -10,12 +10,12 @@ class BagianAkun extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function Akun()
+    public function akun()
     {
         return $this->belongsTo(Akun::class);
     }
 
-    public function Bagian()
+    public function bagian()
     {
         return $this->belongsTo(Bagian::class);
     }

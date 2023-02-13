@@ -10,12 +10,12 @@ class Grup extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function Pengguna()
+    public function pengguna()
     {
         return $this->hasMany(Pengguna::class);
     }
 
-    public function Menu()
+    public function menu()
     {
         return $this->hasMany(Menu::class);
     }

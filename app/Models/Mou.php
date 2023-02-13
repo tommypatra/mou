@@ -10,27 +10,27 @@ class Mou extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function Pengguna()
+    public function pengguna()
     {
         return $this->belongsTo(Pengguna::class);
     }
 
-    public function Pihak()
+    public function pihak()
     {
         return $this->belongsTo(Pihak::class);
     }
 
-    public function Jenis()
+    public function jenis()
     {
         return $this->belongsTo(Jenis::class);
     }
 
-    public function Kategori()
+    public function kategori()
     {
         return $this->belongsTo(Kategori::class);
     }
 
-    public function File()
+    public function file()
     {
         return $this->hasMany(File::class);
     }

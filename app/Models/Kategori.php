@@ -10,7 +10,7 @@ class Kategori extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function Mou()
+    public function mou()
     {
         return $this->hasMany(Mou::class);
     }

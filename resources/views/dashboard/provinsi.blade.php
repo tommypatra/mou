@@ -7,12 +7,12 @@
 
 @section('pagetitle')
     <div class="pagetitle">
-        <h1>Akses</h1>
+        <h1>Provinsi</h1>
         <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('login') }}">Home</a></li>
             <li class="breadcrumb-item">Akun</li>
-            <li class="breadcrumb-item active">Akses</li>
+            <li class="breadcrumb-item active">Provinsi</li>
         </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -23,9 +23,10 @@
 <div class="col-lg-12">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center mb-3">            
-            <h3 class="card-title d-flex">Data Akses</h3>
+            <h3 class="card-title d-flex">Data Provinsi</h3>
             <div class="list-inline d-flex">
                 <div class="buttons">
+                    <a href="#" class="btn icon btn-primary btn-tambah"><i class="bi bi-plus-circle"></i></a>
                     <a href="#" class="btn icon btn-primary btn-refresh"><i class="bi bi-arrow-clockwise"></i></a>
                 </div>
             </div>
@@ -37,13 +38,7 @@
                         <tr>
                             <th><input type="checkbox" class="cekSemua"></th>
                             <th>No</th>
-                            <th>Grup</th>
-                            <th>Menu</th>
-                            <th>C</th>
-                            <th>R</th>
-                            <th>U</th>
-                            <th>D</th>
-                            <th>S</th>
+                            <th>Provinsi</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -60,7 +55,6 @@
         <form id="fweb" class="row g-3 needs-validation" novalidate>
             @csrf
             <input type="hidden" name="id" id="id">
-            <input type="hidden" name="menu_id" id="menu_id">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">FORM APLIKASI</h5>
@@ -69,51 +63,18 @@
                 <div class="modal-body">
 
                     <div class="row">
-                        <div class="col-6">
-                            <label for="grup" class="form-label" >Grup :</label>
-                            <div id="grup-caption"></div>
+                        <div class="col-8">
+                            <label for="provinsi" class="form-label">Nama Provinsi</label>
+                            <div class="input-group has-validation">
+                                <input type="text" name="provinsi" class="form-control" id="provinsi" required>
+                                <div class="invalid-feedback">Ketik provinsi anda!</div>
+                            </div>
                         </div>
-                        <div class="col-6">
-                            <label for="menu" class="form-label" >Menu :</label>
-                            <div id="menu-caption"></div>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-6 mt-3">
-                            <label for="grup" class="form-label" >Hak Akses :</label>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <input type="checkbox" name="create" id="create" value="1"> Create 
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <input type="checkbox" name="read" id="read" value="1"> Read 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <input type="checkbox" name="update" id="update" value="1"> Update 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <input type="checkbox" name="delete" id="delete" value="1"> Delete 
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <input type="checkbox" name="special" id="special" value="1"> All 
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="tutup-modal" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
@@ -138,7 +99,7 @@
                 ["25", "50", "75", "Semua"]
             ],
             ajax: {
-                url: "{{ route('akses-read') }}",
+                url: "{{ route('provinsi-read') }}",
                 dataType: "json",
                 type: "POST",
                 data: function (d) {
@@ -178,13 +139,7 @@
             columns: [
                 {data: 'cek',className: "text-center", orderable: false, searchable: false},
                 {data: 'no'},
-                {data: 'namagrup'},
-                {data: 'menu'},
-                {data: 'c', className: "text-center" },
-                {data: 'r', className: "text-center" },
-                {data: 'u', className: "text-center" },
-                {data: 'd', className: "text-center" },
-                {data: 's', className: "text-center" },
+                {data: 'provinsi'},
                 {data: 'action', className: "text-center", orderable: false, searchable: false},
             ],
             initComplete: function (e) {
@@ -206,7 +161,7 @@
 
         function fillform(dt){
             $('#id').val(dt.id);
-            $('#akses').val(dt.akses);
+            $('#provinsi').val(dt.provinsi);
             $('#aktif').val(dt.aktif).trigger('change');
         }
 
@@ -219,37 +174,21 @@
             reloadTable();
         })
 
-        $(document).on("click",".btn-tambah",function(){
+        $(".btn-tambah").click(function(){
             resetform();
-            $("#menu_id").val($(this).data('id'));
-            $("#grup-caption").html($(this).data('grupcaption'));
-            $("#menu-caption").html($(this).data('menucaption'));
             var myModal = new bootstrap.Modal(document.getElementById('modal-form-web'), {
                 backdrop: 'static',
                 keyboard: false,
             });
             myModal.toggle();
+            $("#provinsi").focus();
         });
 
-        //ganti akses pada datatables
-        $(document).on("click",".updakses",function(){
-            let formVal = {
-                _token:$("input[name=_token]").val(),
-                id:$(this).val(),
-                menu_id:$(this).data('menu_id'),
-                akses:$(this).data('akses'),
-                cek:$(this).is(":checked")
-            };
-            appAjax('{{ route("akses-create") }}', formVal).done(function(vRet) {
-                showmymessage(vRet.messages,vRet.status);
-            });
-
-        })
-
+        //ganti
         $(document).on("click",".btn-ganti",function(){
             resetform();
             var formVal={_token:$("input[name=_token]").val(),id:$(this).data("id")};
-            appAjax("{{ route('akses-update') }}", formVal).done(function(vRet) {
+            appAjax("{{ route('provinsi-update') }}", formVal).done(function(vRet) {
                  if(vRet.status){
                     var myModal = new bootstrap.Modal(document.getElementById('modal-form-web'), {
                         backdrop: 'static',
@@ -273,7 +212,7 @@
         function hapus(idTerpilih){
             var formVal={_token:$("input[name=_token]").val(),id:idTerpilih};
             if(idTerpilih.length > 0 && confirm("apakah anda yakin?")){
-                appAjax("{{ route('akses-delete') }}", formVal).done(function(vRet) {
+                appAjax("{{ route('provinsi-delete') }}", formVal).done(function(vRet) {
                     if(vRet.status){
                         reloadTable();
                     }
@@ -305,11 +244,12 @@
             let formVal = $(this).serialize();
             let isValid = form.checkValidity();
             if(isValid){
-                appAjax('{{ route("akses-create") }}', formVal).done(function(vRet) {
+                appAjax('{{ route("provinsi-create") }}', formVal).done(function(vRet) {
                     if(vRet.status){
-                        var myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('modal-form-web'));
-                        myModal.hide();
+                        if(vRet.insert)
+                            resetform();
                         reloadTable();
+                        $("#provinsi").focus();
                     }
                     showmymessage(vRet.messages,vRet.status);
                 });

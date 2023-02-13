@@ -10,12 +10,12 @@ class Pihak extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function Kabupaten()
+    public function kabupaten()
     {
         return $this->belongsTo(Kabupaten::class);
     }
 
-    public function Mou()
+    public function mou()
     {
         return $this->hasMany(Mou::class);
     }

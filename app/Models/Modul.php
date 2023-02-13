@@ -10,7 +10,7 @@ class Modul extends Model
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function Akses()
+    public function akses()
     {
         return $this->hasMany(Akses::class);
     }
