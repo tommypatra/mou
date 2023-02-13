@@ -117,7 +117,7 @@
             type:'post',
             data: function (params) {
                 return {
-                    kabupaten: params.term, // search term
+                    cari: params.term, // search term
                     _token: $("meta[name='csrf-token']").attr("content"),
                 };
             },
@@ -125,7 +125,7 @@
                 return {
                     results: $.map(data, function (item) {
                         return {
-                            text: item.text,
+                            text: item.kabupaten,
                             id: item.id
                         }
                     })

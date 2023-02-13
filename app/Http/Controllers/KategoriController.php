@@ -97,4 +97,10 @@ class KategoriController extends Controller
         }
         return response()->json($retval);
     }
+
+    public function search(Request $request)
+    {
+        $data = Kategori::where('kategori', 'like', '%' . $request['cari'] . '%')->get();
+        return response()->json($dt);
+    }
 }

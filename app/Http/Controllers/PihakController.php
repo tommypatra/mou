@@ -105,18 +105,12 @@ class PihakController extends Controller
         return response()->json($retval);
     }
 
-    public function cariKabupaten(Request $request)
+    public function search(Request $request)
     {
-        $dt = Kabupaten::with("provinsi")
-            ->where('kabupaten', 'like', '%' . $request['q'] . '%')->get();
-        $retval = [];
-        foreach ($dt as $i => $dt) {
-            $retval[$i] = [
-                "id" => $dt->id,
-                "text" => $dt->kabupaten,
-                "provinsi" => isset($dt->provinsi) ? $dt->provinsi['provinsi'] : "",
-            ];
-        }
-        return $retval;
+        $dt = Pihak::with(["kabupaten.provinsi"])
+            ->where('pihak', 'like', '%' . $request['cari'] . '%')
+            ->orWhere('alamat', 'like', '%' . $request['cari'] . '%')
+            ->get();
+        return response()->json($dt);
     }
 }

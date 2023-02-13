@@ -98,4 +98,10 @@ class GrupController extends Controller
         }
         return response()->json($retval);
     }
+
+    public function search(Request $request)
+    {
+        $retval = Grup::where('grup', 'like', '%' . $request['cari'] . '%')->get();
+        return response()->json($retval);
+    }
 }

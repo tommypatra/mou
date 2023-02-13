@@ -7,12 +7,12 @@
 
 @section('pagetitle')
     <div class="pagetitle">
-        <h1>Kabupaten</h1>
+        <h1>KerjaSama</h1>
         <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('login') }}">Home</a></li>
             <li class="breadcrumb-item">Akun</li>
-            <li class="breadcrumb-item active">Kabupaten</li>
+            <li class="breadcrumb-item active">Kerja Sama</li>
         </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -23,9 +23,10 @@
 <div class="col-lg-12">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center mb-3">            
-            <h3 class="card-title d-flex">Data Kabupaten</h3>
+            <h3 class="card-title d-flex">Data Kerja Sama</h3>
             <div class="list-inline d-flex">
                 <div class="buttons">
+                    <a href="#" class="btn icon btn-primary btn-filter"><i class="bi bi-funnel"></i></a>
                     <a href="#" class="btn icon btn-primary btn-tambah"><i class="bi bi-plus-circle"></i></a>
                     <a href="#" class="btn icon btn-primary btn-refresh"><i class="bi bi-arrow-clockwise"></i></a>
                 </div>
@@ -38,8 +39,12 @@
                         <tr>
                             <th><input type="checkbox" class="cekSemua"></th>
                             <th>No</th>
-                            <th>Kabupaten</th>
-                            <th>Provinsi</th>
+                            <th>Tahun</th>
+                            <th>Pihak</th>
+                            <th>Kerja Sama</th>
+                            <th>Jenis</th>
+                            <th>Kategori</th>
+                            <th>File Arsip</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -65,20 +70,18 @@
 
                     <div class="row">
                         <div class="col-8">
-                            <label for="kabupaten" class="form-label">Nama Kabupaten</label>
+                            <label for="kerjasama" class="form-label">KerjaSama</label>
                             <div class="input-group has-validation">
-                                <input type="text" name="kabupaten" class="form-control" id="kabupaten" required>
-                                <div class="invalid-feedback">Ketik kabupaten anda!</div>
+                                <input type="text" name="kerjasama" class="form-control" id="kerjasama" required>
+                                <div class="invalid-feedback">Ketik kerjasama anda!</div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-6">
-                            <label for="provinsi_id" class="form-label">Provinsi</label>
-                            <select name="provinsi_id" id="provinsi_id" required>
+                        <div class="col-4">
+                            <label for="aktif" class="form-label">Status</label>
+                            <select name="aktif" id="aktif" required>
                             </select>
-                            <div class="invalid-feedback">pilih provinsi!</div>
+                            <div class="invalid-feedback">pilih status aktif!</div>
                         </div>
                     </div>
                 </div>
@@ -97,34 +100,7 @@
     <script src="js/select2lib.js"></script>
     <script type="text/javascript">
 
-        $("#provinsi_id").select2({
-            minimumInputLength: 3,
-            placeholder: 'Cari provinsi',
-            dropdownParent: $("#provinsi_id").parent(),
-            ajax: {
-                url: "{{ route('provinsi-search') }}",
-                dataType: 'json',
-                delay: 250,
-                type:'post',
-                data: function (params) {
-                    return {
-                        cari: params.term, // search term
-                        _token: $("meta[name='csrf-token']").attr("content"),
-                    };
-                },
-                processResults: function (data, params) {
-                    return {
-                        results: $.map(data, function (item) {
-                            return {
-                                text: item.provinsi,
-                                id: item.id
-                            }
-                        })
-                    };
-                },
-                cache: true
-            }
-        });
+        sel2_aktif2("#aktif");
 
         var dtTable = $('.datatable').DataTable({
             processing: true,
@@ -135,7 +111,7 @@
                 ["25", "50", "75", "Semua"]
             ],
             ajax: {
-                url: "{{ route('kabupaten-read') }}",
+                url: "{{ route('kerjasama-read') }}",
                 dataType: "json",
                 type: "POST",
                 data: function (d) {
@@ -174,9 +150,13 @@
             ],
             columns: [
                 {data: 'cek',className: "text-center", orderable: false, searchable: false},
-                {data: 'no'},
-                {data: 'kabupaten'},
-                {data: 'provinsi', orderable: false, searchable: false},
+                {data: 'no', searchable: false},
+                {data: 'tahun'},
+                {data: 'pihak', orderable: false, searchable: false},
+                {data: 'tentang'},
+                {data: 'jenis', orderable: false, searchable: false},
+                {data: 'kategori', orderable: false, searchable: false},
+                {data: 'file_det', orderable: false, searchable: false},
                 {data: 'action', className: "text-center", orderable: false, searchable: false},
             ],
             initComplete: function (e) {
@@ -192,17 +172,14 @@
         function resetform(){
             $('#fweb')[0].reset();
             $('#id').val("");
-            $('#provinsi_id').empty();
+            $('#aktif').val("1").trigger('change');
             $("#fweb").removeClass("was-validated");
         };
 
         function fillform(dt){
             $('#id').val(dt.id);
-            $('#kabupaten').val(dt.kabupaten);
-            $('#provinsi_id').empty();
-            if(dt.provinsi){
-                $("#provinsi_id").append($('<option>', {value:dt.provinsi.id, text: dt.provinsi.provinsi}));
-            }
+            $('#kerjasama').val(dt.kerjasama);
+            $('#aktif').val(dt.aktif).trigger('change');
         }
 
         function reloadTable() {
@@ -221,14 +198,14 @@
                 keyboard: false,
             });
             myModal.toggle();
-            $("#kabupaten").focus();
+            $("#kerjasama").focus();
         });
 
         //ganti
         $(document).on("click",".btn-ganti",function(){
             resetform();
             var formVal={_token:$("input[name=_token]").val(),id:$(this).data("id")};
-            appAjax("{{ route('kabupaten-update') }}", formVal).done(function(vRet) {
+            appAjax("{{ route('kerjasama-update') }}", formVal).done(function(vRet) {
                  if(vRet.status){
                     var myModal = new bootstrap.Modal(document.getElementById('modal-form-web'), {
                         backdrop: 'static',
@@ -252,7 +229,7 @@
         function hapus(idTerpilih){
             var formVal={_token:$("input[name=_token]").val(),id:idTerpilih};
             if(idTerpilih.length > 0 && confirm("apakah anda yakin?")){
-                appAjax("{{ route('kabupaten-delete') }}", formVal).done(function(vRet) {
+                appAjax("{{ route('kerjasama-delete') }}", formVal).done(function(vRet) {
                     if(vRet.status){
                         reloadTable();
                     }
@@ -284,12 +261,12 @@
             let formVal = $(this).serialize();
             let isValid = form.checkValidity();
             if(isValid){
-                appAjax('{{ route("kabupaten-create") }}', formVal).done(function(vRet) {
+                appAjax('{{ route("kerjasama-create") }}', formVal).done(function(vRet) {
                     if(vRet.status){
                         if(vRet.insert)
                             resetform();
                         reloadTable();
-                        $("#kabupaten").focus();
+                        $("#kerjasama").focus();
                     }
                     showmymessage(vRet.messages,vRet.status);
                 });

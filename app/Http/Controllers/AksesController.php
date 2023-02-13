@@ -153,4 +153,13 @@ class AksesController extends Controller
         }
         return response()->json($retval);
     }
+
+    public function search(Request $request)
+    {
+        $retval = Menu::with(["grup", "modul", "akses"])
+            ->where('grup_id', 'like', '%' . $request['cari'] . '%')
+            ->orwhere('modul_id', 'like', '%' . $request['cari'] . '%')
+            ->get();
+        return response()->json($retval);
+    }
 }

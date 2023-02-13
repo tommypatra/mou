@@ -97,4 +97,10 @@ class JenisController extends Controller
         }
         return response()->json($retval);
     }
+
+    public function search(Request $request)
+    {
+        $retval = Jenis::where('jenis', 'like', '%' . $request['cari'] . '%')->get();
+        return response()->json($retval);
+    }
 }

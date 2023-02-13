@@ -68,6 +68,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/grup-read', [GrupController::class, 'read'])->name('grup-read');
         Route::post('/grup-update', [GrupController::class, 'update'])->name('grup-update');
         Route::post('/grup-delete', [GrupController::class, 'delete'])->name('grup-delete');
+        Route::post('/grup-search', [GrupController::class, 'search'])->name('grup-search');
 
         //master bagian
         Route::get('/bagian', [BagianController::class, 'index'])->name('bagian');
@@ -104,6 +105,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/modul-read', [ModulController::class, 'read'])->name('modul-read');
         Route::post('/modul-update', [ModulController::class, 'update'])->name('modul-update');
         Route::post('/modul-delete', [ModulController::class, 'delete'])->name('modul-delete');
+        Route::post('/modul-search', [ModulController::class, 'search'])->name('modul-search');
 
         //master akses
         Route::get('/akses', [AksesController::class, 'index'])->name('akses');

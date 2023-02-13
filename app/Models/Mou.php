@@ -15,6 +15,11 @@ class Mou extends Model
         return $this->belongsTo(Pengguna::class);
     }
 
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class);
+    }
+
     public function pihak()
     {
         return $this->belongsTo(Pihak::class);
@@ -25,10 +30,6 @@ class Mou extends Model
         return $this->belongsTo(Jenis::class);
     }
 
-    public function kategori()
-    {
-        return $this->belongsTo(Kategori::class);
-    }
 
     public function file()
     {

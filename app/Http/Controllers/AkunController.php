@@ -337,4 +337,16 @@ class AkunController extends Controller
         }
         return response()->json($retval);
     }
+
+    public function search(Request $request)
+    {
+        $retval = Akun::with(['pengguna.grup', 'bagianakun.bagian'])
+            ->where('nama', 'like', '%' . $request['cari'] . '%')
+            ->orwhere('email', 'like', '%' . $request['cari'] . '%')
+            ->orwhere('tempatlahir', 'like', '%' . $request['cari'] . '%')
+            ->orwhere('alamat', 'like', '%' . $request['cari'] . '%')
+            ->orwhere('nohp', 'like', '%' . $request['cari'] . '%')
+            ->get();
+        return response()->json($retval);
+    }
 }

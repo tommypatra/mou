@@ -96,4 +96,10 @@ class BagianController extends Controller
         }
         return response()->json($retval);
     }
+
+    public function search(Request $request)
+    {
+        $retval = Bagian::where('bagian', 'like', '%' . $request['cari'] . '%')->get();
+        return response()->json($retval);
+    }
 }

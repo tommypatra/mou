@@ -104,15 +104,7 @@ class KabupatenController extends Controller
     public function search(Request $request)
     {
         $dt = Kabupaten::with("provinsi")
-            ->where('kabupaten', 'like', '%' . $request['kabupaten'] . '%')->get();
-        $retval = [];
-        foreach ($dt as $i => $dt) {
-            $retval[$i] = [
-                "id" => $dt->id,
-                "text" => $dt->kabupaten,
-                "provinsi" => isset($dt->provinsi) ? $dt->provinsi->provinsi : "",
-            ];
-        }
-        return $retval;
+            ->where('kabupaten', 'like', '%' . $request['cari'] . '%')->get();
+        return response()->json($dt);
     }
 }

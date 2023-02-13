@@ -96,14 +96,7 @@ class ProvinsiController extends Controller
 
     public function search(Request $request)
     {
-        $dt = Provinsi::where('provinsi', 'like', '%' . $request['provinsi'] . '%')->get();
-        $retval = [];
-        foreach ($dt as $i => $dt) {
-            $retval[$i] = [
-                "id" => $dt->id,
-                "text" => $dt->provinsi,
-            ];
-        }
-        return $retval;
+        $dt = Provinsi::where('provinsi', 'like', '%' . $request['cari'] . '%')->get();
+        return response()->json($dt);
     }
 }
