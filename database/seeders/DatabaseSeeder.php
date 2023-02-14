@@ -218,7 +218,14 @@ class DatabaseSeeder extends Seeder
 
         //nilai default provinsi
         $dtdef = [
-            "SULAWESI TENGGARA", "JAWA TIMUR",
+            "SULAWESI TENGGARA",
+            "JAWA TIMUR",
+            "SULAWESI SELATAN",
+            "SULAWESI UTARA",
+            "SULAWESI TENGAH", //5
+            "SULAWESI BARAT",
+            "GORONTALO",
+            "JAKARTA",
         ];
         foreach ($dtdef as $dt) {
             Provinsi::create([
@@ -249,6 +256,11 @@ class DatabaseSeeder extends Seeder
             ["kabupaten" => "KABUPATEN SIDOARJO", "provinsi_id" => "2"],
             ["kabupaten" => "KABUPATEN MALANG", "provinsi_id" => "2"],
             ["kabupaten" => "KABUPATEN JEMBER", "provinsi_id" => "2"],
+            ["kabupaten" => "KOTA JAKARTA", "provinsi_id" => "8"], //22
+            ["kabupaten" => "KOTA MAKASSAR", "provinsi_id" => "3"],
+            ["kabupaten" => "KOTA PALU", "provinsi_id" => "5"],
+            ["kabupaten" => "KOTA GORONTALO", "provinsi_id" => "7"], //25
+            ["kabupaten" => "KOTA MANADO", "provinsi_id" => "4"],
         ];
         foreach ($dtdef as $dt) {
             Kabupaten::create([
@@ -260,9 +272,18 @@ class DatabaseSeeder extends Seeder
         //nilai default pihak
         $dtdef = [
             ["pihak" => "UNIVERSITAS HALUOLEO", "kabupaten_id" => "1"],
+            ["pihak" => "UNIVERSITAS AIRLANGGA", "kabupaten_id" => "18"],
             ["pihak" => "PEMERINTAH DAERAH PROVINSI SULAWESI TENGGARA", "kabupaten_id" => "1"],
-            ["pihak" => "PEMERINTAH DAERAH KABUPATEN WAKAOTIB", "kabupaten_id" => "10"],
-            ["pihak" => "UNIVERSITAS ISLAM NEGERI SURABAYA", "kabupaten_id" => "18"],
+            ["pihak" => "PEMERINTAH DAERAH KABUPATEN WAKATOBI", "kabupaten_id" => "10"],
+            ["pihak" => "PEMERINTAH DAERAH KABUPATEN BUTON SELATAN", "kabupaten_id" => "14"],
+            ["pihak" => "PEMERINTAH DAERAH KABUPATEN KONAWE KEPULAUAN", "kabupaten_id" => "5"],
+            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) SURABAYA", "kabupaten_id" => "18"],
+            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) MALANG", "kabupaten_id" => "20"],
+            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) JAKARTA", "kabupaten_id" => "22"],
+            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) MAKASSAR", "kabupaten_id" => "23"],
+            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) PALU", "kabupaten_id" => "24"],
+            ["pihak" => "INSTITUT AGAMA ISLAM NEGERI (IAIN) GORONTALO", "kabupaten_id" => "25"],
+            ["pihak" => "INSTITUT AGAMA ISLAM NEGERI (IAIN) MANADO", "kabupaten_id" => "26"],
         ];
         foreach ($dtdef as $dt) {
             Pihak::create([

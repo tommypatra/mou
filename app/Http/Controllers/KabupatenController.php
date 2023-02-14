@@ -51,6 +51,8 @@ class KabupatenController extends Controller
         $datapost = $this->validate($request, [
             'kabupaten' => 'required|min:3',
             'provinsi_id' => 'required',
+        ], [], [
+            'provinsi_id' => 'pilihan provinsi',
         ]);
         $datapost['akun_id'] = auth()->user()->id;
         //dd($datapost);

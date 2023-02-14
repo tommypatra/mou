@@ -76,6 +76,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/bagian-read', [BagianController::class, 'read'])->name('bagian-read');
         Route::post('/bagian-update', [BagianController::class, 'update'])->name('bagian-update');
         Route::post('/bagian-delete', [BagianController::class, 'delete'])->name('bagian-delete');
+        Route::post('/bagian-search', [BagianController::class, 'search'])->name('bagian-search');
 
         //master jenis
         Route::get('/jenis', [JenisController::class, 'index'])->name('jenis');
@@ -120,6 +121,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/pihak-read', [PihakController::class, 'read'])->name('pihak-read');
         Route::post('/pihak-update', [PihakController::class, 'update'])->name('pihak-update');
         Route::post('/pihak-delete', [PihakController::class, 'delete'])->name('pihak-delete');
+        Route::post('/pihak-search', [PihakController::class, 'search'])->name('pihak-search');
 
         //master kerjasama
         Route::get('/kerjasama', [KerjaSamaController::class, 'index'])->name('kerjasama');

@@ -12,7 +12,7 @@ class DashboardController extends Controller
         //akses session
         //dd(session()->all());
         //dd(session()->get("akses"));
-
+        //session()->get("bagians");
         //akses user yang login dari auth
         //dd(auth()->user());
         //dd(auth()->user()->email);

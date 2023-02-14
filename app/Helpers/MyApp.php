@@ -116,17 +116,23 @@ class MyApp
         return $randomString;
     }
 
-    public function listgroups($email = null)
+    public function detailLogin($email = null)
     {
-        $dt = \App\Models\Akun::with(['pengguna.grup'])->where("email", $email)->get();
+        $dt = \App\Models\Akun::with(['pengguna.grup', 'bagianAkun.bagian'])->where("email", $email)->get();
         $groups = [];
+        $bagians = [];
         foreach ($dt as $dp) {
             foreach ($dp->pengguna as $pg) {
                 $tmp = $pg->grup;
                 $groups[] = ["id" => $tmp->id, "grup" => $tmp->grup];
             }
+            foreach ($dp->bagianAkun as $pg) {
+                $tmp = $pg->bagian;
+                $bagians[] = ["id" => $tmp->id, "grup" => $tmp->bagian];
+            }
         }
-        return collect($groups);
+        $ret = ['groups' => collect($groups), 'bagians' => collect($bagians)];
+        return $ret;
     }
 
     public function buildTree(array $elements, $parentId = null, $id = "id", $idp = "parent_id", $cld = "children")

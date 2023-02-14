@@ -88,6 +88,9 @@ class MenuController extends Controller
             'modul_id' => 'required',
             'urut' => 'required',
             'aktif' => 'required',
+        ], [], [
+            'grup_id' => 'pilihan grup',
+            'modul_id' => 'pilihan modul',
         ]);
         if ($request['menu_id'])
             $datapost['menu_id'] = $request['menu_id'];

@@ -3,6 +3,7 @@
 @section('head')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" type="text/css" href="plugins/datatables/datatables.min.css"/>
+    <link href="plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">
 @endsection
 
 @section('pagetitle')
@@ -39,7 +40,7 @@
                         <tr>
                             <th><input type="checkbox" class="cekSemua"></th>
                             <th>No</th>
-                            <th>Tahun</th>
+                            <th>Tanggal</th>
                             <th>Pihak</th>
                             <th>Kerja Sama</th>
                             <th>Jenis</th>
@@ -69,21 +70,75 @@
                 <div class="modal-body">
 
                     <div class="row">
-                        <div class="col-8">
-                            <label for="kerjasama" class="form-label">KerjaSama</label>
-                            <div class="input-group has-validation">
-                                <input type="text" name="kerjasama" class="form-control" id="kerjasama" required>
-                                <div class="invalid-feedback">Ketik kerjasama anda!</div>
-                            </div>
+                        <div class="col-4">
+                            <label for="jenis_id" class="form-label">Jenis</label>
+                            <select name="jenis_id" id="jenis_id" required>
+                            </select>
+                            <div class="invalid-feedback">pilih jenis kerjasama !</div>
                         </div>
 
-                        <div class="col-4">
-                            <label for="aktif" class="form-label">Status</label>
-                            <select name="aktif" id="aktif" required>
+                        <div class="col-8">
+                            <label for="pihak_id" class="form-label">Pihak Kerjasama</label>
+                            <select name="pihak_id" id="pihak_id" required>
                             </select>
-                            <div class="invalid-feedback">pilih status aktif!</div>
+                            <div class="invalid-feedback">pilih pihak!</div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <label for="bagian_id" class="form-label">Bagian Internal</label>
+                            <select name="bagian_id" id="bagian_id" required>
+                            </select>
+                            <div class="invalid-feedback">pilih bagian!</div>
+                        </div>
+                        <div class="col-6">
+                            <label for="no_surat_internal" class="form-label">No. Surat Perjanjian</label>
+                            <input type="text" name="no_surat_internal" class="form-control" id="no_surat_internal"  required>
+                            <div class="invalid-feedback">masukan no. surat perjanjian!</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="tentang" class="form-label">Judul Kerjasama</label>
+                            <textarea name="tentang" class="form-control" id="tentang" rows="3" required></textarea>
+                            <div class="invalid-feedback">ketik judul kerjasama !</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="ruang_lingkup" class="form-label">Ruang Lingkup</label>
+                            <textarea name="ruang_lingkup" class="form-control" id="ruang_lingkup" rows="5" ></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="kategori_id" class="form-label">Kategori</label>
+                            <select name="kategori_id" id="kategori_id" required></select>
+                            <div class="invalid-feedback">pilih kategori!</div>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-4">
+                            <label for="tgl" class="form-label">Tanggal Pelaksanaan</label>
+                            <input type="text" name="tgl" class="form-control datepicker" id="tgl" value="{{ date('Y-m-d') }}" required>
+                            <div class="invalid-feedback">masukan tanggal kegiatan!</div>
+                        </div>
+                        <div class="col-4">
+                            <label for="tgl_berlaku" class="form-label">Tanggal Berlaku</label>
+                            <input type="text" name="tgl_berlaku" class="form-control datepicker" id="tgl_berlaku"  value="{{ date('Y-m-d') }}" required>
+                            <div class="invalid-feedback">masukan tanggal mulai berlaku!</div>
+                        </div>
+                        <div class="col-4">
+                            <label for="tgl_berakhir" class="form-label">Tanggal Berakhir</label>
+                            <input type="text" name="tgl_berakhir" class="form-control datepicker" id="tgl_berakhir" value="{{ date('Y-m-d') }}" required>
+                            <div class="invalid-feedback">masukan tanggal berakhir!</div>
+                        </div>
+                    </div>
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -96,11 +151,48 @@
 @endsection
 
 @section("scriptJs")
+    <script src='plugins/bootstrap-material-moment/moment.js'></script>
+    <script src='plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js'></script>
     <script type="text/javascript" src="plugins/datatables/datatables.min.js"></script>
     <script src="js/select2lib.js"></script>
     <script type="text/javascript">
 
-        sel2_aktif2("#aktif");
+        sel2_datalokal("#bagian_id",  {!! $dtbagian !!} , "#modal-form-web");
+        sel2_datalokal("#jenis_id",  {!! $dtjenis !!} , "#modal-form-web");
+        sel2_datalokal("#kategori_id",  {!! $dtkategori !!} , "#modal-form-web");
+        $("#pihak_id").select2({
+            minimumInputLength: 3,
+            placeholder: 'Cari pihak',
+            dropdownParent: $("#pihak_id").parent(),
+            ajax: {
+                url: "{{ route('pihak-search') }}",
+                dataType: 'json',
+                delay: 250,
+                type:'post',
+                data: function (params) {
+                    return {
+                        cari: params.term, // search term
+                        _token: $("meta[name='csrf-token']").attr("content"),
+                    };
+                },
+                processResults: function (data, params) {
+                    return {
+                        results: $.map(data, function (item) {
+                            return {
+                                text: item.pihak,
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+                cache: true
+            }
+        });
+
+        $('.datepicker').bootstrapMaterialDatePicker({
+            weekStart: 0,
+            time: false,
+        });
 
         var dtTable = $('.datatable').DataTable({
             processing: true,
@@ -151,7 +243,7 @@
             columns: [
                 {data: 'cek',className: "text-center", orderable: false, searchable: false},
                 {data: 'no', searchable: false},
-                {data: 'tahun'},
+                {data: 'tgl'},
                 {data: 'pihak', orderable: false, searchable: false},
                 {data: 'tentang'},
                 {data: 'jenis', orderable: false, searchable: false},

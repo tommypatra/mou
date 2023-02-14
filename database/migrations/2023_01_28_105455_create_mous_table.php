@@ -15,11 +15,10 @@ class CreateMousTable extends Migration
     {
         Schema::create('mous', function (Blueprint $table) {
             $table->id();
-            $table->year("tahun");
             $table->text("tentang");
-            $table->text("ruang_lingkup");
+            $table->text("ruang_lingkup")->nullable();
             $table->string("no_surat_internal", 150);
-            $table->string("no_surat_eksternal", 150);
+            $table->string("no_surat_eksternal", 150)->nullable();
             $table->date("tgl")->nullable();
             $table->date("tgl_berlaku")->nullable();
             $table->date("tgl_berakhir")->nullable();

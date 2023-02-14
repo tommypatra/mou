@@ -97,13 +97,18 @@ class AkunController extends Controller
         $datapost = $this->validate($request, [
             'nama' => 'required|min:3',
             'alamat' => 'required|min:3',
-            //'email' => 'required|email:dns|unique:akuns',
-            'email' => 'required|email:dns',
+            'email' => 'required|email',
+            //'email' => 'required|email:dns',
             'kel' => 'required',
             'tempatlahir' => 'required|min:3',
             'tanggallahir' => 'required',
             'nohp' => 'required|min:9',
             'aktif' => 'required',
+        ], [], [
+            'kel' => 'jenis kelamin',
+            'tempatlahir' => 'tempat lahir',
+            'tanggallahir' => 'tanggal lahir',
+            'nohp' => 'nomor handphone',
         ]);
 
         if ($request['password']) {

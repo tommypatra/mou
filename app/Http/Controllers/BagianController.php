@@ -99,7 +99,16 @@ class BagianController extends Controller
 
     public function search(Request $request)
     {
-        $retval = Bagian::where('bagian', 'like', '%' . $request['cari'] . '%')->get();
+        //filter id bagian user telah login 
+        $ids = [];
+        foreach (session()->get("bagians") as $bagian) {
+            //dd($bagian['id']);
+            $ids[] = $bagian['id'];
+        }
+        //dd($ids);
+        $retval = Bagian::where('bagian', 'like', '%' . $request['cari'] . '%')
+            ->whereIn('id', $ids)
+            ->get();
         return response()->json($retval);
     }
 }

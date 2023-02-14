@@ -6,13 +6,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use DataTables;
 use App\Models\Mou;
+use App\Models\Jenis;
+use App\Models\Bagian;
+use App\Models\Kategori;
+use App\Models\Pengguna;
 
 
 class KerjaSamaController extends Controller
 {
     public function index()
     {
-        return view('dashboard.kerjasama');
+        $ids = [];
+        foreach (session()->get("bagians") as $bagian) {
+            $ids[] = $bagian['id'];
+        }
+        $dtjenis = Jenis::select('id', 'jenis as text')->where('aktif', '1')->get();
+        $dtkategori = Kategori::select('id', 'kategori as text')->where('aktif', '1')->get();
+        $dtbagian = Bagian::select('id', 'bagian as text')->whereIn('id', $ids)->get();
+
+        return view('dashboard.kerjasama', ['dtbagian' => $dtbagian, 'dtjenis' => $dtjenis, 'dtkategori' => $dtkategori]);
     }
 
     public function read()
@@ -21,7 +33,6 @@ class KerjaSamaController extends Controller
         $data = Mou::select(
             DB::raw('@rownum := @rownum + 1 AS no'),
             'id',
-            'tahun',
             'tentang',
             'ruang_lingkup',
             'no_surat_internal',
@@ -88,23 +99,45 @@ class KerjaSamaController extends Controller
     public function create(Request $request)
     {
         $retval = array("status" => false, "insert" => true, "messages" => ["gagal, hubungi admin"]);
+
         //cek apakah id ada atau tidak, kalau ada maka status edit dan jika tidak ada maka insert
         $insert = true;
-        if ($request['id'])
+        if ($request['id']) {
             $insert = false;
+        }
 
-        $datapost = $this->validate($request, [
-            'kerjasama' => 'required|min:3',
-            'provinsi_id' => 'required',
-        ]);
-        $datapost['akun_id'] = auth()->user()->id;
-        //dd($datapost);
+        $rules = [
+            'jenis_id' => 'required',
+            'pihak_id' => 'required',
+            'bagian_id' => 'required',
+            'no_surat_internal' => 'required',
+            'tentang' => 'required',
+            'kategori_id' => 'required',
+            'tgl' => 'required|date',
+            'tgl_berlaku' => 'required|date|after_or_equal:tgl',
+            'tgl_berakhir' => 'required|date|after:tgl_berlaku',
+        ];
+        $niceNames = [
+            'jenis_id' => 'jenis kerjasama',
+            'pihak_id' => 'pihak kerjasama',
+            'bagian_id' => 'bagian kerjasama',
+            'no_surat_internal' => 'no surat internal',
+            'kategori_id' => 'kategori',
+            'tgl' => 'tanggal kerjasama',
+            'tgl_berlaku' => 'tanggal berlaku',
+            'tgl_berakhir' => 'tanggal berakhir',
+        ];
+        $datapost = $this->validate($request, $rules, [], $niceNames);
+
         $retval['insert'] = $insert;
         try {
             DB::beginTransaction();
-            if ($insert)
+            if ($insert) {
+                $pengguna_id = Pengguna::where("akun_id", "=", auth()->user()->id)->first()->id;
+                $datapost['pengguna_id'] = auth()->user()->id;
+
                 $id = Mou::create($datapost)->id;
-            else {
+            } else {
                 $cari = Mou::where("id", $request['id'])->first();
                 $cari->update($datapost);
             }

@@ -24,11 +24,12 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            $groups = \MyApp::listgroups($credentials['email']);
+            $det = \MyApp::detailLogin($credentials['email']);
             session(
                 [
-                    'akses' => $groups->first()['id'],
-                    'groups' => $groups,
+                    'akses' => $det['groups']->first()['id'],
+                    'groups' => $det['groups'],
+                    'bagians' => $det['bagians'],
                 ]
             );
             $retval = array("status" => true, "messages" => ["Login berhasil, user ditemukan. Tunggu sedang diarahkan ke laman dashboard"]);

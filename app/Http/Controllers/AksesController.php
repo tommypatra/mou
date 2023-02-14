@@ -98,6 +98,13 @@ class AksesController extends Controller
         if ($request['id'])
             $insert = false;
 
+        $this->validate(
+            $request,
+            ['menu_id' => 'required',],
+            [],
+            ['menu_id' => "menu web"]
+        );
+
         $retval['insert'] = $insert;
         try {
             DB::beginTransaction();
