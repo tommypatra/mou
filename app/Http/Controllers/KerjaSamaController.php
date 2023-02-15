@@ -217,7 +217,7 @@ class KerjaSamaController extends Controller
 
             if ($request->hasFile('fileupload')) {
                 $this->validate($request, [
-                    'fileupload' => ['file', 'mimes:jpeg,png,jpg,gif,svg,pdf', 'max:1024'],
+                    'fileupload' => ['mimes:jpeg,png,jpg,gif,svg,pdf', 'max:1024'],
                 ]);
                 $file = $request->file('fileupload');
                 $ext = $file->getClientOriginalExtension();
@@ -238,9 +238,9 @@ class KerjaSamaController extends Controller
                 $datapost['source'] = $file->store($destinationPath);
 
                 $id = File::create($datapost)->id;
+                $retval["status"] = true;
+                $retval["messages"] = ["Simpan data berhasil dilakukan"];
             }
-            $retval["status"] = true;
-            $retval["messages"] = ["Simpan data berhasil dilakukan"];
             DB::commit();
         } catch (\Throwable $e) {
             $retval['messages'] = [$e->getMessage()];
