@@ -261,10 +261,43 @@
             },
         });
 
+        $(document).on("change",'.fileupload',function() {
+            var mou_id = $(this).data("mouid");
+            var form = $("#fupload"+mou_id)[0];
+            let formVal = new FormData(form);
+            formVal.append("_token",$("input[name=_token]").val()); 
+            formVal.append("mou_id", mou_id); 
+            formVal.append("fileupload", $(this)[0].files[0]); 
+            if(confirm("apakah anda yakin?")){
+                appAjaxUpload('{{ route("kerjasama-upload") }}', formVal).done(function(vRet) {
+                    if(vRet.status){
+                        reloadTable();
+                    }
+                    showmymessage(vRet.messages,vRet.status);
+                });
+            }
+        });
+
+        $(document).on("click",".btn-hapus-upload",function(){
+            var formVal={_token:$("input[name=_token]").val(),id:$(this).data("id")};
+            if(confirm("apakah anda yakin?")){
+                appAjax('{{ route("kerjasama-upload-delete") }}', formVal).done(function(vRet) {
+                    if(vRet.status){
+                        reloadTable();
+                    }
+                    showmymessage(vRet.messages,vRet.status);
+                });
+            }
+        })
+        
         function resetform(){
             $('#fweb')[0].reset();
             $('#id').val("");
-            $('#aktif').val("1").trigger('change');
+            
+            $('#bagian_id').val("").trigger('change');
+            $('#jenis_id').val("1").trigger('change');
+            $('#kategori_id').val("1").trigger('change');
+            $('#pihak_id').val("").trigger('change');
             $("#fweb").removeClass("was-validated");
         };
 

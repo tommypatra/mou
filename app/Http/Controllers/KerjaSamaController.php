@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+
 use DataTables;
 use App\Models\Mou;
 use App\Models\Jenis;
 use App\Models\Bagian;
 use App\Models\Kategori;
 use App\Models\Pengguna;
-
+use App\Models\File;
+use Facade\FlareClient\Http\Response;
 
 class KerjaSamaController extends Controller
 {
@@ -65,11 +68,16 @@ class KerjaSamaController extends Controller
                 return isset($row->jenis) ? $row->jenis->jenis : "";
             })
             ->addColumn('file_det', function ($row) {
-                $retval = '';
+                $retval = '<form id="fupload' . $row->id . '"><input class="form-control fileupload" data-mouid="' . $row->id . '" type="file" nama="fileupload"></form>';
                 if (count($row->file) > 0) {
                     $retval .= '<ul>';
                     foreach ($row->file as $dt) {
-                        $retval .= '<li>' . $dt->source . '</li>';
+                        $file = json_decode($dt->detail);
+                        $url = asset('storage') . '/' . $dt->source;
+                        $retval .= '<li>';
+                        $retval .= '<a href="' . $url . '" target="_blank">' . $file->originalName . '</a> ';
+                        $retval .= '<button type="button" class="btn btn-sm btn-hapus-upload" data-id="' . $dt->id . '"><i class="bi bi-trash3"></i></button>';
+                        $retval .= '</li>';
                     }
                     $retval .= '</ul>';
                 }
@@ -190,5 +198,78 @@ class KerjaSamaController extends Controller
             ->orWhere('ruang_lingkup', 'like', '%' . $request['cari'] . '%')
             ->get();
         return response()->json($dt);
+    }
+
+    public function upload(Request $request)
+    {
+        $retval = array("status" => false, "insert" => true, "messages" => ["gagal, hubungi admin"]);
+        //cek apakah id ada atau tidak, kalau ada maka status edit dan jika tidak ada maka insert
+        $insert = true;
+        $datapost = $this->validate($request, [
+            'mou_id' => 'required',
+        ], [], [
+            'mou_id' => 'MoU/PKS',
+        ]);
+
+        $retval['insert'] = $insert;
+        try {
+            DB::beginTransaction();
+
+            if ($request->hasFile('fileupload')) {
+                $this->validate($request, [
+                    'fileupload' => ['file', 'mimes:jpeg,png,jpg,gif,svg,pdf', 'max:1024'],
+                ]);
+                $file = $request->file('fileupload');
+                $ext = $file->getClientOriginalExtension();
+                $det =   [
+                    "originalName" => $file->getClientOriginalName(),
+                    "size" => ceil($file->getSize() / 1000),
+                    "mime" => $file->getMimeType(),
+                    "ext" => $ext,
+                ];
+                $datapost['detail'] = json_encode($det);
+                $datapost['is_image'] = "1";
+                if (strtolower($ext) == "pdf") {
+                    $datapost['is_image'] = "0";
+                }
+                $destinationPath = 'uploads/kerjasama/' . date('Y') . '/' . date('m');
+
+                $datapost['is_file'] = "1";
+                $datapost['source'] = $file->store($destinationPath);
+
+                $id = File::create($datapost)->id;
+            }
+            $retval["status"] = true;
+            $retval["messages"] = ["Simpan data berhasil dilakukan"];
+            DB::commit();
+        } catch (\Throwable $e) {
+            $retval['messages'] = [$e->getMessage()];
+            DB::rollBack();
+        }
+        return response()->json($retval);
+    }
+
+    public function uploadDelete(Request $request)
+    {
+        $retval = array("status" => false, "messages" => ["maaf, gagal dilakukan"]);
+        try {
+            DB::beginTransaction();
+
+            $cari = File::where("id", $request['id'])->first();
+
+            if (isset($cari->id)) {
+                $file = $cari->source;
+                if (Storage::disk('public')->exists($file)) {
+                    Storage::delete($file);
+                }
+                $cari->delete();
+                $retval = array("status" => true, "messages" => ["hapus file berhasil dilakukan"]);
+            }
+            DB::commit();
+        } catch (\Throwable $e) {
+            $retval['messages'] = [$e->getMessage()];
+            DB::rollBack();
+        }
+        return $retval;
     }
 }

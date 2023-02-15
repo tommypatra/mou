@@ -129,6 +129,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/kerjasama-read', [KerjaSamaController::class, 'read'])->name('kerjasama-read');
         Route::post('/kerjasama-update', [KerjaSamaController::class, 'update'])->name('kerjasama-update');
         Route::post('/kerjasama-delete', [KerjaSamaController::class, 'delete'])->name('kerjasama-delete');
+        Route::post('/kerjasama-upload', [KerjaSamaController::class, 'upload'])->name('kerjasama-upload');
+        Route::post('/kerjasama-upload-delete', [KerjaSamaController::class, 'uploadDelete'])->name('kerjasama-upload-delete');
 
         //master kabupaten
         Route::get('/kabupaten', [KabupatenController::class, 'index'])->name('kabupaten');

@@ -18,6 +18,7 @@ class CreateFilesTable extends Migration
             $table->string("source", 250);
             $table->enum("is_file", ["0", "1"])->default("1");
             $table->enum("is_image", ["0", "1"])->default("1");
+            $table->text("detail")->nullable();
             $table->foreignId("mou_id");
             $table->timestamps();
             $table->foreign("mou_id")->references("id")->on("mous")->cascadeOnUpdate();
