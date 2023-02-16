@@ -116,6 +116,25 @@ class MyApp
         return $randomString;
     }
 
+    public function hakakses($controller = null)
+    {
+        //echo session()->get("groups");
+        $return = \App\Models\Akses::select("akses.c", "akses.r", "akses.u", "akses.d", "akses.s")
+            ->leftJoin('menus', function ($join) {
+                $join->on('menus.id', '=', 'akses.menu_id');
+            })
+            ->leftJoin('grups', function ($join) {
+                $join->on('grups.id', '=', 'menus.grup_id');
+            })
+            ->leftJoin('moduls', function ($join) {
+                $join->on('moduls.id', '=', 'menus.modul_id');
+            })
+            ->where("moduls.link", $controller)
+            ->where("grups.id", session()->get("akses"))
+            ->first();
+        return $return;
+    }
+
     public function detailLogin($email = null)
     {
         $dt = \App\Models\Akun::with(['pengguna.grup', 'bagianAkun.bagian'])->where("email", $email)->get();

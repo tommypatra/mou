@@ -118,29 +118,30 @@ class AkunController extends Controller
             $datapost['password'] = Hash::make($request['password']);
         }
         $retval['insert'] = $insert;
+
+        if ($request->hasFile('foto')) {
+            $this->validate($request, [
+                'foto' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:1024'],
+            ]);
+            $file = $request->file('foto');
+            $ext = $file->getClientOriginalExtension();
+            $det =   [
+                "size" => ceil($file->getSize() / 1000),
+                "mime" => $file->getMimeType()
+            ];
+            $destinationPath = 'uploads/foto-profil';
+
+            $datapost['foto'] = $file->store($destinationPath);
+            if (!$insert) {
+                AkunController::hapusfile($cari->foto);
+            }
+        }
+
         try {
             DB::beginTransaction();
             //untuk cari
             if (!$insert)
                 $cari = Akun::where("id", $request['id'])->first();
-
-            if ($request->hasFile('foto')) {
-                $this->validate($request, [
-                    'foto' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:1024'],
-                ]);
-                $file = $request->file('foto');
-                $ext = $file->getClientOriginalExtension();
-                $det =   [
-                    "size" => ceil($file->getSize() / 1000),
-                    "mime" => $file->getMimeType()
-                ];
-                $destinationPath = 'uploads/foto-profil';
-
-                $datapost['foto'] = $file->store($destinationPath);
-                if (!$insert) {
-                    AkunController::hapusfile($cari->foto);
-                }
-            }
 
             if ($insert) {
                 $id = Akun::create($datapost)->id;

@@ -6,6 +6,13 @@
     <p class="text-center small">Masukan email dan password anda untuk masuk</p>
   </div>
 
+  @if(session()->has('pesan'))
+    <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+      {{ session('pesan') }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>  
+  @endif
+
   <form id="fweb" class="row g-3 needs-validation" novalidate>
     @csrf
     <div class="col-12">
@@ -31,6 +38,7 @@
     </div>
     <div class="col-12">
       <button class="btn btn-primary w-100" type="submit">Masuk</button>
+      <a class="btn btn-danger w-100 mt-1" href="{{ route('auth') }}">google</a>
     </div>
     <div class="col-12">
       <p class="small mb-0">Belum ada akun? <a href="{{ route('pendaftaran') }}">Daftar disini</a></p>

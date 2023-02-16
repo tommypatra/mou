@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Laravel\Socialite\Facades\Socialite;
 use App\Models\Akun;
 
 class LoginController extends Controller
@@ -24,19 +25,24 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            $det = \MyApp::detailLogin($credentials['email']);
-            session(
-                [
-                    'akses' => $det['groups']->first()['id'],
-                    'groups' => $det['groups'],
-                    'bagians' => $det['bagians'],
-                ]
-            );
+            LoginController::setSession($credentials['email']);
             $retval = array("status" => true, "messages" => ["Login berhasil, user ditemukan. Tunggu sedang diarahkan ke laman dashboard"]);
         } else {
             $retval['messages'] = ["login tidak berhasil, user atau password tidak ditemukan"];
         }
         return response()->json($retval);
+    }
+
+    public function setSession($email = null)
+    {
+        $det = \MyApp::detailLogin($email);
+        session(
+            [
+                'akses' => $det['groups']->first()['id'],
+                'groups' => $det['groups'],
+                'bagians' => $det['bagians'],
+            ]
+        );
     }
 
     public function logout()

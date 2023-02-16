@@ -210,15 +210,14 @@ class KerjaSamaController extends Controller
         ], [], [
             'mou_id' => 'MoU/PKS',
         ]);
-
         $retval['insert'] = $insert;
-        try {
-            DB::beginTransaction();
 
-            if ($request->hasFile('fileupload')) {
-                $this->validate($request, [
-                    'fileupload' => ['mimes:jpeg,png,jpg,gif,svg,pdf', 'max:1024'],
-                ]);
+        if ($request->hasFile('fileupload')) {
+            $this->validate($request, [
+                'fileupload' => ['mimes:jpeg,png,jpg,gif,svg,pdf', 'max:1024'],
+            ]);
+
+            try {
                 $file = $request->file('fileupload');
                 $ext = $file->getClientOriginalExtension();
                 $det =   [
@@ -237,14 +236,16 @@ class KerjaSamaController extends Controller
                 $datapost['is_file'] = "1";
                 $datapost['source'] = $file->store($destinationPath);
 
+
+                DB::beginTransaction();
                 $id = File::create($datapost)->id;
                 $retval["status"] = true;
                 $retval["messages"] = ["Simpan data berhasil dilakukan"];
+                DB::commit();
+            } catch (\Throwable $e) {
+                $retval['messages'] = [$e->getMessage()];
+                DB::rollBack();
             }
-            DB::commit();
-        } catch (\Throwable $e) {
-            $retval['messages'] = [$e->getMessage()];
-            DB::rollBack();
         }
         return response()->json($retval);
     }

@@ -17,10 +17,10 @@ class CreateAkunsTable extends Migration
             $table->id();
             $table->string("nama", 200);
             $table->string("email", 200)->unique();
-            $table->string("password");
+            $table->string("password")->nullable();
             $table->string("glrdepan", 50)->nullable();
             $table->string("glrbelakang", 50)->nullable();
-            $table->enum("kel", ["L", "P"]);
+            $table->enum("kel", ["L", "P"])->nullable();
             $table->string("tempatlahir", 50)->nullable();
             $table->date("tanggallahir")->nullable();
             $table->text("alamat")->nullable();

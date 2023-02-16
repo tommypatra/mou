@@ -11,6 +11,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ModulController;
 use App\Http\Controllers\PihakController;
 use App\Http\Controllers\BagianController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\ProvinsiController;
@@ -40,6 +41,10 @@ Route::group(['middleware' => 'guest'], function () {
     Route::get('/login', [LoginController::class, 'index']);
     Route::post('/login', [LoginController::class, 'authenticate'])->name('ceklogin');
 
+    //login google
+    Route::get('/auth/redirect', [GoogleController::class, 'redirect'])->name('auth');
+    Route::get('/auth/callback', [GoogleController::class, 'callback']);
+
     //untuk pendaftaran
     Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran');
     Route::get('/aktivasi-pengguna/{token}', [PendaftaranController::class, 'aktivasi_pengguna'])->name('aktivasi');
@@ -49,6 +54,23 @@ Route::group(['middleware' => 'guest'], function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    //master pihak
+    Route::get('/pihak', [PihakController::class, 'index'])->name('pihak');
+    Route::post('/pihak-read', [PihakController::class, 'read'])->name('pihak-read');
+    Route::post('/pihak-update', [PihakController::class, 'update'])->name('pihak-update');
+    Route::post('/pihak-create', [PihakController::class, 'create'])->name('pihak-create');
+    Route::post('/pihak-delete', [PihakController::class, 'delete'])->name('pihak-delete');
+    Route::post('/pihak-search', [PihakController::class, 'search'])->name('pihak-search');
+
+    //master kerjasama
+    Route::get('/kerjasama', [KerjaSamaController::class, 'index'])->name('kerjasama');
+    Route::post('/kerjasama-create', [KerjaSamaController::class, 'create'])->name('kerjasama-create');
+    Route::post('/kerjasama-read', [KerjaSamaController::class, 'read'])->name('kerjasama-read');
+    Route::post('/kerjasama-update', [KerjaSamaController::class, 'update'])->name('kerjasama-update');
+    Route::post('/kerjasama-delete', [KerjaSamaController::class, 'delete'])->name('kerjasama-delete');
+    Route::post('/kerjasama-upload', [KerjaSamaController::class, 'upload'])->name('kerjasama-upload');
+    Route::post('/kerjasama-upload-delete', [KerjaSamaController::class, 'uploadDelete'])->name('kerjasama-upload-delete');
 
     Route::group(['middleware' => 'isAdmin'], function () {
         //akun
@@ -114,23 +136,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/akses-read', [AksesController::class, 'read'])->name('akses-read');
         Route::post('/akses-update', [AksesController::class, 'update'])->name('akses-update');
         Route::post('/akses-delete', [AksesController::class, 'delete'])->name('akses-delete');
-
-        //master pihak
-        Route::get('/pihak', [PihakController::class, 'index'])->name('pihak');
-        Route::post('/pihak-create', [PihakController::class, 'create'])->name('pihak-create');
-        Route::post('/pihak-read', [PihakController::class, 'read'])->name('pihak-read');
-        Route::post('/pihak-update', [PihakController::class, 'update'])->name('pihak-update');
-        Route::post('/pihak-delete', [PihakController::class, 'delete'])->name('pihak-delete');
-        Route::post('/pihak-search', [PihakController::class, 'search'])->name('pihak-search');
-
-        //master kerjasama
-        Route::get('/kerjasama', [KerjaSamaController::class, 'index'])->name('kerjasama');
-        Route::post('/kerjasama-create', [KerjaSamaController::class, 'create'])->name('kerjasama-create');
-        Route::post('/kerjasama-read', [KerjaSamaController::class, 'read'])->name('kerjasama-read');
-        Route::post('/kerjasama-update', [KerjaSamaController::class, 'update'])->name('kerjasama-update');
-        Route::post('/kerjasama-delete', [KerjaSamaController::class, 'delete'])->name('kerjasama-delete');
-        Route::post('/kerjasama-upload', [KerjaSamaController::class, 'upload'])->name('kerjasama-upload');
-        Route::post('/kerjasama-upload-delete', [KerjaSamaController::class, 'uploadDelete'])->name('kerjasama-upload-delete');
 
         //master kabupaten
         Route::get('/kabupaten', [KabupatenController::class, 'index'])->name('kabupaten');

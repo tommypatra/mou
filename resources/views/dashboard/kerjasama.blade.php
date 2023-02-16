@@ -268,14 +268,15 @@
             formVal.append("_token",$("input[name=_token]").val()); 
             formVal.append("mou_id", mou_id); 
             formVal.append("fileupload", $(this)[0].files[0]); 
-            if(confirm("apakah anda yakin?")){
-                appAjaxUpload('{{ route("kerjasama-upload") }}', formVal).done(function(vRet) {
-                    if(vRet.status){
-                        reloadTable();
-                    }
-                    showmymessage(vRet.messages,vRet.status);
-                });
-            }
+            // if(confirm("apakah anda yakin?")){
+            appAjaxUpload('{{ route("kerjasama-upload") }}', formVal).done(function(vRet) {
+                if(vRet.status){
+                    reloadTable();
+                }
+                showmymessage(vRet.messages,vRet.status);
+            });
+            $(this).val(null);
+            // }
         });
 
         $(document).on("click",".btn-hapus-upload",function(){
