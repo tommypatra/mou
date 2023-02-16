@@ -18,7 +18,7 @@ class ModulController extends Controller
     public function read()
     {
         DB::statement(DB::raw('set @rownum=0'));
-        $data = Modul::select(DB::raw('@rownum := @rownum + 1 AS no'), 'id', 'menu', 'link', 'icon', 'deskripsi', 'aktif');
+        $data = Modul::select(DB::raw('@rownum := @rownum + 1 AS no'), 'id', 'controller', 'menu', 'link', 'icon', 'deskripsi', 'aktif');
 
         return Datatables::of($data)->addIndexColumn()
             ->editColumn('aktif', function ($row) {
@@ -49,6 +49,7 @@ class ModulController extends Controller
 
         $datapost = $this->validate($request, [
             'menu' => 'required|min:3',
+            'controller' => 'required',
             'link' => 'required',
             'aktif' => 'required',
         ]);

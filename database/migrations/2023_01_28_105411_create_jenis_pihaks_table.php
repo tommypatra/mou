@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateModulsTable extends Migration
+class CreateJenisPihaksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,9 @@ class CreateModulsTable extends Migration
      */
     public function up()
     {
-        Schema::create('moduls', function (Blueprint $table) {
+        Schema::create('jenis_pihaks', function (Blueprint $table) {
             $table->id();
-            $table->string("menu", 100);
-            $table->string("controller", 100)->nullable();
-            $table->string("link", 200)->nullable();
-            $table->string("icon", 50)->nullable();
-            $table->string("deskripsi", 300)->nullable();
+            $table->string("jenis", 100);
             $table->enum("aktif", ["0", "1"])->default("1");
             $table->timestamps();
         });
@@ -32,6 +28,6 @@ class CreateModulsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('moduls');
+        Schema::dropIfExists('jenis_pihaks');
     }
 }

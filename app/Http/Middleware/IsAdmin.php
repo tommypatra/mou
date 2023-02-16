@@ -17,8 +17,6 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        //json_decode(Pengguna::CekAdmin());
-        //die;
         if (json_decode(Pengguna::CekAdmin())->status)
             return $next($request);
         return redirect()->back();

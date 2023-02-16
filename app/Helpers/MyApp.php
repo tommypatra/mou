@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-//use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Redirect;
 
 class MyApp
 {
@@ -116,10 +116,10 @@ class MyApp
         return $randomString;
     }
 
-    public function hakakses($controller = null)
+    public function hakakses($link = null)
     {
-        //echo session()->get("groups");
-        $return = \App\Models\Akses::select("akses.c", "akses.r", "akses.u", "akses.d", "akses.s")
+        $retval = ['c' => '0', 'r' => '0', 'u' => '0', 'd' => '0', 's' => '0'];
+        $check = \App\Models\Akses::select("akses.c", "akses.r", "akses.u", "akses.d", "akses.s")
             ->leftJoin('menus', function ($join) {
                 $join->on('menus.id', '=', 'akses.menu_id');
             })
@@ -129,10 +129,15 @@ class MyApp
             ->leftJoin('moduls', function ($join) {
                 $join->on('moduls.id', '=', 'menus.modul_id');
             })
-            ->where("moduls.link", $controller)
+            ->where("moduls.link", $link)
             ->where("grups.id", session()->get("akses"))
             ->first();
-        return $return;
+
+        if ($check) {
+            $retval = ['c' => $check->c, 'r' => $check->r, 'u' => $check->u, 'd' => $check->d, 's' => $check->s];
+        }
+
+        return $retval;
     }
 
     public function detailLogin($email = null)

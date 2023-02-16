@@ -15,6 +15,11 @@ class Pihak extends Model
         return $this->belongsTo(Kabupaten::class);
     }
 
+    public function jenisPihak()
+    {
+        return $this->belongsTo(JenisPihak::class);
+    }
+
     public function mou()
     {
         return $this->hasMany(Mou::class);

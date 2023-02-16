@@ -42,6 +42,7 @@
                             <th>Alamat</th>
                             <th>Provinsi</th>
                             <th>Kabupaten</th>
+                            <th>Jenis Pihak</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -73,6 +74,14 @@
                                 <div class="invalid-feedback">Ketik pihak anda!</div>
                             </div>
                         </div>
+                        <div class="col-4">
+                            <label for="jenis_pihak_id" class="form-label">Jenis Pihak</label>
+                            <select name="jenis_pihak_id" id="jenis_pihak_id" required>
+                            </select>
+                            <div class="invalid-feedback">pilih jenis pihak!</div>
+                        </div>
+                    </div>
+                    <div class="row">
 
                         <div class="col-12">
                             <label for="alamat" class="form-label">Alamat</label>
@@ -81,6 +90,8 @@
                                 <div class="invalid-feedback">Ketik alamat anda!</div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-6">
                             <label for="kabupaten_id" class="form-label">Kabupaten</label>
                             <select name="kabupaten_id" id="kabupaten_id" required>
@@ -104,7 +115,7 @@
 <script src="js/select2lib.js"></script>
 <script type="text/javascript">
 
-    //sel2_aktif2("#kabupaten_id");
+    sel2_datalokal("#jenis_pihak_id",  {!! $jenispihak !!} , "#modal-form-web");
 
     $("#kabupaten_id").select2({
         minimumInputLength: 3,
@@ -206,6 +217,11 @@
                 searchable: false
             },
             {
+                data: 'jenis',
+                orderable: false,
+                searchable: false
+            },
+            {
                 data: 'action',
                 className: "text-center",
                 orderable: false,
@@ -225,6 +241,7 @@
     function resetform() {
         $('#fweb')[0].reset();
         $('#id').val("");
+        $('#jenis_pihak_id').val("").trigger('change');
         $('#kabupaten_id').empty();
         $("#fweb").removeClass("was-validated");
     };
@@ -233,6 +250,7 @@
         $('#id').val(dt.id);
         $('#pihak').val(dt.pihak);
         $('#alamat').val(dt.alamat);
+        $('#jenis_pihak_id').val(dt.jenis_pihak_id).trigger('change');
         $('#kabupaten_id').empty();
         if(dt.kabupaten){
             $("#kabupaten_id").append($('<option>', {value:dt.kabupaten.id, text: dt.kabupaten.kabupaten}));

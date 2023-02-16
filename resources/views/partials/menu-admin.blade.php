@@ -53,6 +53,11 @@
           </a>
         </li>
         <li>
+          <a href="{{ route('jenispihak') }}">
+            <i class="bi bi-circle"></i><span>Jenis Pihak</span>
+          </a>
+        </li>
+        <li>
           <a href="{{ route('kabupaten') }}">
             <i class="bi bi-circle"></i><span>Kabupaten</span>
           </a>

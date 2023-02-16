@@ -7,12 +7,12 @@
 
 @section('pagetitle')
     <div class="pagetitle">
-        <h1>Modul</h1>
+        <h1>Jenis Pihak</h1>
         <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('login') }}">Home</a></li>
             <li class="breadcrumb-item">Akun</li>
-            <li class="breadcrumb-item active">Modul</li>
+            <li class="breadcrumb-item active">Jenis Pihak</li>
         </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -23,7 +23,7 @@
 <div class="col-lg-12">
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center mb-3">            
-            <h3 class="card-title d-flex">Data Modul</h3>
+            <h3 class="card-title d-flex">Data Jenis Pihak</h3>
             <div class="list-inline d-flex">
                 <div class="buttons">
                     <a href="#" class="btn icon btn-primary btn-tambah"><i class="bi bi-plus-circle"></i></a>
@@ -38,11 +38,7 @@
                         <tr>
                             <th><input type="checkbox" class="cekSemua"></th>
                             <th>No</th>
-                            <th>Modul</th>
-                            <th>Controller</th>
-                            <th>Link</th>
-                            <th>Icon</th>
-                            <th>Deskripsi</th>
+                            <th>Jenis Pihak</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -69,44 +65,10 @@
 
                     <div class="row">
                         <div class="col-8">
-                            <label for="menu" class="form-label">Menu</label>
+                            <label for="jenis" class="form-label">Jenis Pihak</label>
                             <div class="input-group has-validation">
-                                <input type="text" name="menu" class="form-control" id="menu" required>
-                                <div class="invalid-feedback">Ketik menu anda!</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <label for="controller" class="form-label">Controller</label>
-                            <div class="input-group has-validation">
-                                <input type="text" name="controller" class="form-control" id="controller" required>
-                                <div class="invalid-feedback">Ketik controller anda!</div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <label for="link" class="form-label">Link</label>
-                            <div class="input-group has-validation">
-                                <input type="text" name="link" class="form-control" id="link" required>
-                                <div class="invalid-feedback">Ketik link anda!</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <label for="deskripsi" class="form-label">Deskripsi</label>
-                            <div class="input-group has-validation">
-                                <textarea row="3" name="deskripsi" class="form-control" id="deskripsi"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-4">
-                            <label for="icon" class="form-label">Icon</label>
-                            <div class="input-group has-validation">
-                                <input type="text" name="icon" class="form-control" id="icon" required>
-                                <div class="invalid-feedback">Ketik icon anda!</div>
+                                <input type="text" name="jenis" class="form-control" id="jenis" required>
+                                <div class="invalid-feedback">Ketik jenis anda!</div>
                             </div>
                         </div>
 
@@ -117,8 +79,6 @@
                             <div class="invalid-feedback">pilih status aktif!</div>
                         </div>
                     </div>
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
@@ -146,7 +106,7 @@
                 ["25", "50", "75", "Semua"]
             ],
             ajax: {
-                url: "{{ route('modul-read') }}",
+                url: "{{ route('jenispihak-read') }}",
                 dataType: "json",
                 type: "POST",
                 data: function (d) {
@@ -186,11 +146,7 @@
             columns: [
                 {data: 'cek',className: "text-center", orderable: false, searchable: false},
                 {data: 'no'},
-                {data: 'menu'},
-                {data: 'controller'},
-                {data: 'link'},
-                {data: 'icon'},
-                {data: 'deskripsi'},
+                {data: 'jenis'},
                 {data: 'aktif', },
                 {data: 'action', className: "text-center", orderable: false, searchable: false},
             ],
@@ -213,11 +169,7 @@
 
         function fillform(dt){
             $('#id').val(dt.id);
-            $('#menu').val(dt.menu);
-            $('#controller').val(dt.controller);
-            $('#link').val(dt.link);
-            $('#icon').val(dt.icon);
-            $('#deskripsi').val(dt.deskripsi);
+            $('#jenis').val(dt.jenis);
             $('#aktif').val(dt.aktif).trigger('change');
         }
 
@@ -237,14 +189,14 @@
                 keyboard: false,
             });
             myModal.toggle();
-            $("#menu").focus();
+            $("#jenis").focus();
         });
 
         //ganti
         $(document).on("click",".btn-ganti",function(){
             resetform();
             var formVal={_token:$("input[name=_token]").val(),id:$(this).data("id")};
-            appAjax("{{ route('modul-update') }}", formVal).done(function(vRet) {
+            appAjax("{{ route('jenispihak-update') }}", formVal).done(function(vRet) {
                  if(vRet.status){
                     var myModal = new bootstrap.Modal(document.getElementById('modal-form-web'), {
                         backdrop: 'static',
@@ -268,7 +220,7 @@
         function hapus(idTerpilih){
             var formVal={_token:$("input[name=_token]").val(),id:idTerpilih};
             if(idTerpilih.length > 0 && confirm("apakah anda yakin?")){
-                appAjax("{{ route('modul-delete') }}", formVal).done(function(vRet) {
+                appAjax("{{ route('jenispihak-delete') }}", formVal).done(function(vRet) {
                     if(vRet.status){
                         reloadTable();
                     }
@@ -300,12 +252,12 @@
             let formVal = $(this).serialize();
             let isValid = form.checkValidity();
             if(isValid){
-                appAjax('{{ route("modul-create") }}', formVal).done(function(vRet) {
+                appAjax('{{ route("jenispihak-create") }}', formVal).done(function(vRet) {
                     if(vRet.status){
                         if(vRet.insert)
                             resetform();
                         reloadTable();
-                        $("#menu").focus();
+                        $("#jenis").focus();
                     }
                     showmymessage(vRet.messages,vRet.status);
                 });

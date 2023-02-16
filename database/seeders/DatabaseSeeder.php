@@ -15,6 +15,7 @@ use App\Models\Kategori;
 use App\Models\Pengguna;
 use App\Models\Provinsi;
 use App\Models\Akses;
+use App\Models\JenisPihak;
 
 use App\Models\Kabupaten;
 use App\Models\BagianAkun;
@@ -32,7 +33,7 @@ class DatabaseSeeder extends Seeder
 
     public function run()
     {
-        $jumdata = 100;
+        $jumdata = 10;
 
         //nilai default grup
         $dtdef = [
@@ -140,21 +141,31 @@ class DatabaseSeeder extends Seeder
 
         //nilai default modul
         $dtdef = [
-            ['menu' => 'Kerja Sama', 'link' => '/kerjasama', 'icon' => '<i class="bi bi-hdd-network"></i>'], //1
-            ['menu' => 'Pihak', 'link' => '/pihak', 'icon' => '<i class="bi bi-journal-text"></i>'],
-            ['menu' => 'Akun', 'link' => '#', 'icon' => '<i class="bi bi-people"></i>'], //3
-            ['menu' => 'Daftar Pengguna', 'link' => '/akun', 'icon' => '<i class="bi bi-circle"></i>'],
-            ['menu' => 'Hak Akses', 'link' => '/hakakses', 'icon' => '<i class="bi bi-circle"></i>'],
-            ['menu' => 'Referensi', 'link' => '#', 'icon' => '<i class="bi bi-collection"></i>'], //6
-            ['menu' => 'Grup', 'link' => '/grup', 'icon' => '<i class="bi bi-circle"></i>'],
-            ['menu' => 'Bagian', 'link' => '/bagian', 'icon' => '<i class="bi bi-circle"></i>'],
-            ['menu' => 'Jenis', 'link' => '/jenis', 'icon' => '<i class="bi bi-circle"></i>'],
-            ['menu' => 'Kategori', 'link' => '/kategori', 'icon' => '<i class="bi bi-circle"></i>'], //10
-            ['menu' => 'Modul', 'link' => '/modul', 'icon' => '<i class="bi bi-circle"></i>'],
-            ['menu' => 'Menu', 'link' => '/menu', 'icon' => '<i class="bi bi-circle"></i>'], //12
+            [
+                'controller' => 'KerjaSama',
+                'menu' => 'Kerja Sama',
+                'route' => 'KerjaSama',
+                'link' => '/kerjasama',
+                'icon' => '<i class="bi bi-hdd-network"></i>'
+            ], //1
+            ['menu' => 'Pihak',  'controller' => 'Pihak', 'link' => '/pihak', 'icon' => '<i class="bi bi-journal-text"></i>'],
+            ['menu' => 'Akun', 'controller' => '#', 'link' => '#', 'icon' => '<i class="bi bi-people"></i>'], //3
+            ['menu' => 'Daftar Pengguna', 'controller' => 'Akun', 'link' => '/akun', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Hak Akses', 'controller' => 'Akses', 'link' => '/akses', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Referensi', 'controller' => '#', 'link' => '#', 'icon' => '<i class="bi bi-collection"></i>'], //6
+            ['menu' => 'Grup', 'controller' => 'Grup', 'link' => '/grup', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Bagian', 'controller' => 'Bagian', 'link' => '/bagian', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Jenis', 'controller' => 'Jenis', 'link' => '/jenis', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Kategori', 'controller' => 'Kategori', 'link' => '/kategori', 'icon' => '<i class="bi bi-circle"></i>'], //10
+            ['menu' => 'Modul', 'controller' => 'Modul', 'link' => '/modul', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Menu', 'controller' => 'Menu', 'link' => '/menu', 'icon' => '<i class="bi bi-circle"></i>'], //12
+            ['menu' => 'Provinsi', 'controller' => 'Provinsi', 'link' => '/provinsi', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Kabupaten', 'controller' => 'Kabupaten', 'link' => '/kabupaten', 'icon' => '<i class="bi bi-circle"></i>'],
+            ['menu' => 'Jenis Pihak', 'controller' => 'JenisPihak', 'link' => '/jenispihak', 'icon' => '<i class="bi bi-circle"></i>'],
         ];
         foreach ($dtdef as $i => $dt) {
             Modul::create([
+                'controller' => $dt['controller'],
                 'menu' => $dt['menu'],
                 'link' => $dt['link'],
                 'icon' => $dt['icon'],
@@ -175,6 +186,9 @@ class DatabaseSeeder extends Seeder
             ['grup_id' => '1', 'urut' => 10, 'modul_id' => '10', 'menu_id' => 6],
             ['grup_id' => '1', 'urut' => 11, 'modul_id' => '11', 'menu_id' => 6],
             ['grup_id' => '1', 'urut' => 12, 'modul_id' => '12', 'menu_id' => 6],
+            ['grup_id' => '1', 'urut' => 13, 'modul_id' => '13', 'menu_id' => 6],
+            ['grup_id' => '1', 'urut' => 14, 'modul_id' => '14', 'menu_id' => 6],
+            ['grup_id' => '1', 'urut' => 15, 'modul_id' => '15', 'menu_id' => 6],
             ['grup_id' => '2', 'urut' => 1, 'modul_id' => '1', 'menu_id' => null],
             ['grup_id' => '2', 'urut' => 2, 'modul_id' => '2', 'menu_id' => null],
         ];
@@ -201,8 +215,12 @@ class DatabaseSeeder extends Seeder
             ['menu_id' => '10', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
             ['menu_id' => '11', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
             ['menu_id' => '12', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
-            ['menu_id' => '13', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '0',],
-            ['menu_id' => '14', 'c' => '0', 'r' => '1', 'u' => '0', 'd' => '0', 's' => '0',],
+            ['menu_id' => '13', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '14', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+            ['menu_id' => '15', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '1',],
+
+            ['menu_id' => '16', 'c' => '1', 'r' => '1', 'u' => '1', 'd' => '1', 's' => '0',],
+            ['menu_id' => '17', 'c' => '0', 'r' => '1', 'u' => '0', 'd' => '0', 's' => '0',],
         ];
         foreach ($dtdef as $i => $dt) {
             Akses::create([
@@ -269,25 +287,44 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        //nilai default jenis pihak
+        $dtdef = [
+            ["jenis" => "Perguruan Tinggi"],
+            ["jenis" => "Pemerintah Daerah"],
+            ["jenis" => "Pemerintah Provinsi"],
+            ["jenis" => "Kementerian RI"],
+            ["jenis" => "Lembaga"],
+            ["jenis" => "Swasta"],
+            ["jenis" => "BUMN"],
+            ["jenis" => "BUMD"],
+        ];
+        foreach ($dtdef as $dt) {
+            JenisPihak::create([
+                'jenis' => $dt['jenis'],
+            ]);
+        }
+
+
         //nilai default pihak
         $dtdef = [
-            ["pihak" => "UNIVERSITAS HALUOLEO", "kabupaten_id" => "1"],
-            ["pihak" => "UNIVERSITAS AIRLANGGA", "kabupaten_id" => "18"],
-            ["pihak" => "PEMERINTAH DAERAH PROVINSI SULAWESI TENGGARA", "kabupaten_id" => "1"],
-            ["pihak" => "PEMERINTAH DAERAH KABUPATEN WAKATOBI", "kabupaten_id" => "10"],
-            ["pihak" => "PEMERINTAH DAERAH KABUPATEN BUTON SELATAN", "kabupaten_id" => "14"],
-            ["pihak" => "PEMERINTAH DAERAH KABUPATEN KONAWE KEPULAUAN", "kabupaten_id" => "5"],
-            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) SURABAYA", "kabupaten_id" => "18"],
-            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) MALANG", "kabupaten_id" => "20"],
-            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) JAKARTA", "kabupaten_id" => "22"],
-            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) MAKASSAR", "kabupaten_id" => "23"],
-            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) PALU", "kabupaten_id" => "24"],
-            ["pihak" => "INSTITUT AGAMA ISLAM NEGERI (IAIN) GORONTALO", "kabupaten_id" => "25"],
-            ["pihak" => "INSTITUT AGAMA ISLAM NEGERI (IAIN) MANADO", "kabupaten_id" => "26"],
+            ["pihak" => "UNIVERSITAS HALUOLEO", "jenis_pihak_id" => 1, "kabupaten_id" => "1"],
+            ["pihak" => "UNIVERSITAS AIRLANGGA", "jenis_pihak_id" => 1, "kabupaten_id" => "18"],
+            ["pihak" => "PEMERINTAH DAERAH PROVINSI SULAWESI TENGGARA", "jenis_pihak_id" => 3, "kabupaten_id" => "1"],
+            ["pihak" => "PEMERINTAH DAERAH KABUPATEN WAKATOBI", "jenis_pihak_id" => 2, "kabupaten_id" => "10"],
+            ["pihak" => "PEMERINTAH DAERAH KABUPATEN BUTON SELATAN", "jenis_pihak_id" => 2, "kabupaten_id" => "14"],
+            ["pihak" => "PEMERINTAH DAERAH KABUPATEN KONAWE KEPULAUAN", "jenis_pihak_id" => 2, "kabupaten_id" => "5"],
+            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) SURABAYA", "jenis_pihak_id" => 1, "kabupaten_id" => "18"],
+            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) MALANG", "jenis_pihak_id" => 1, "kabupaten_id" => "20"],
+            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) JAKARTA", "jenis_pihak_id" => 1, "kabupaten_id" => "22"],
+            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) MAKASSAR", "jenis_pihak_id" => 1, "kabupaten_id" => "23"],
+            ["pihak" => "UNIVERSITAS ISLAM NEGERI (UIN) PALU", "jenis_pihak_id" => 1, "kabupaten_id" => "24"],
+            ["pihak" => "INSTITUT AGAMA ISLAM NEGERI (IAIN) GORONTALO", "jenis_pihak_id" => 1, "kabupaten_id" => "25"],
+            ["pihak" => "INSTITUT AGAMA ISLAM NEGERI (IAIN) MANADO", "jenis_pihak_id" => 1, "kabupaten_id" => "26"],
         ];
         foreach ($dtdef as $dt) {
             Pihak::create([
                 'pihak' => $dt['pihak'],
+                'jenis_pihak_id' => $dt['jenis_pihak_id'],
                 'kabupaten_id' => $dt['kabupaten_id'],
             ]);
         }

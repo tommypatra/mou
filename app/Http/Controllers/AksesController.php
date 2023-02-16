@@ -8,13 +8,14 @@ use App\Models\Grup;
 use App\Models\Menu;
 use App\Models\Akses;
 use DataTables;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class AksesController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('dashboard.akses');
+        return view('dashboard.akses', ["hakakses" => $request->hakakses]);
     }
 
     public function read()
@@ -36,7 +37,7 @@ class AksesController extends Controller
                 $ret = '';
                 if (isset($row->akses)) {
                     $cek = ($row->akses->c == "1") ? "checked" : "";
-                    $ret = "<input type='checkbox' class='updakses' data-akses='c' value='" . $row->akses->id . "' " . $cek . ">";
+                    $ret = "<input type='checkbox' class='updakses' data-akses='c' data-menu_id='" . $row->id . "' value='" . $row->akses->id . "' " . $cek . ">";
                 }
                 return $ret;
             })
@@ -44,7 +45,7 @@ class AksesController extends Controller
                 $ret = '';
                 if (isset($row->akses)) {
                     $cek = ($row->akses->r == "1") ? "checked" : "";
-                    $ret = "<input type='checkbox' class='updakses' data-akses='r' value='" . $row->akses->id . "' " . $cek . ">";
+                    $ret = "<input type='checkbox' class='updakses' data-akses='r' data-menu_id='" . $row->id . "' value='" . $row->akses->id . "' " . $cek . ">";
                 }
                 return $ret;
             })
@@ -52,7 +53,7 @@ class AksesController extends Controller
                 $ret = '';
                 if (isset($row->akses)) {
                     $cek = ($row->akses->u == "1") ? "checked" : "";
-                    $ret = "<input type='checkbox' class='updakses' data-akses='u' value='" . $row->akses->id . "' " . $cek . ">";
+                    $ret = "<input type='checkbox' class='updakses' data-akses='u' data-menu_id='" . $row->id . "' value='" . $row->akses->id . "' " . $cek . ">";
                 }
                 return $ret;
             })
@@ -60,7 +61,7 @@ class AksesController extends Controller
                 $ret = '';
                 if (isset($row->akses)) {
                     $cek = ($row->akses->d == "1") ? "checked" : "";
-                    $ret = "<input type='checkbox' class='updakses' data-akses='d' value='" . $row->akses->id . "' " . $cek . ">";
+                    $ret = "<input type='checkbox' class='updakses' data-akses='d' data-menu_id='" . $row->id . "' value='" . $row->akses->id . "' " . $cek . ">";
                 }
                 return $ret;
             })
@@ -68,7 +69,7 @@ class AksesController extends Controller
                 $ret = '';
                 if (isset($row->akses)) {
                     $cek = ($row->akses->s == "1") ? "checked" : "";
-                    $ret = "<input type='checkbox' class='updakses' data-akses='s' value='" . $row->akses->id . "' " . $cek . ">";
+                    $ret = "<input type='checkbox' class='updakses' data-akses='s' data-menu_id='" . $row->id . "' value='" . $row->akses->id . "' " . $cek . ">";
                 }
                 return $ret;
             })
@@ -100,7 +101,7 @@ class AksesController extends Controller
 
         $this->validate(
             $request,
-            ['menu_id' => 'required',],
+            ['menu_id' => 'required'],
             [],
             ['menu_id' => "menu web"]
         );

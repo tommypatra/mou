@@ -17,6 +17,7 @@ use Facade\FlareClient\Http\Response;
 
 class KerjaSamaController extends Controller
 {
+
     public function index()
     {
         $ids = [];

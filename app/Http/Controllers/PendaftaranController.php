@@ -36,6 +36,12 @@ class PendaftaranController extends Controller
         unset($datapost['terms']);
         //dd($datapost);
 
+        $extemail = \MyApp::extractemail($datapost['email']);
+        if ($extemail[2] != 'iainkendari.ac.id') {
+            $retval['messages'] = ['Hanya boleh menggunakan email institusi @iainkendari.ac.id'];
+            return response()->json($retval);
+        }
+
         try {
             DB::beginTransaction();
             $id = Akun::create($datapost)->id;
