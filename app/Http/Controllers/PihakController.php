@@ -61,6 +61,7 @@ class PihakController extends Controller
             'pihak' => 'required|min:3',
             'jenis_pihak_id' => 'required',
             'alamat' => 'required|min:3',
+            'kabupaten_id' => 'required',
         ]);
         $datapost['akun_id'] = auth()->user()->id;
         //dd($datapost);
