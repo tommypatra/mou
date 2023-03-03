@@ -40,7 +40,7 @@
                         <tr>
                             <th><input type="checkbox" class="cekSemua"></th>
                             <th>No</th>
-                            <th>Tanggal</th>
+                            {{-- <th>Tanggal</th> --}}
                             <th>Pihak</th>
                             <th>Kerja Sama</th>
                             <th>Jenis</th>
@@ -91,11 +91,11 @@
                             </select>
                             <div class="invalid-feedback">pilih bagian!</div>
                         </div>
-                        <div class="col-6">
+                        {{-- <div class="col-6">
                             <label for="no_surat_internal" class="form-label">No. Surat Perjanjian</label>
                             <input type="text" name="no_surat_internal" class="form-control" id="no_surat_internal"  required>
                             <div class="invalid-feedback">masukan no. surat perjanjian!</div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="row">
                         <div class="col-12">
@@ -121,11 +121,11 @@
                     <hr>
 
                     <div class="row">
-                        <div class="col-4">
+                        {{-- <div class="col-4">
                             <label for="tgl" class="form-label">Tanggal Pelaksanaan</label>
                             <input type="text" name="tgl" class="form-control datepicker" id="tgl" value="{{ date('Y-m-d') }}" required>
                             <div class="invalid-feedback">masukan tanggal kegiatan!</div>
-                        </div>
+                        </div> --}}
                         <div class="col-4">
                             <label for="tgl_berlaku" class="form-label">Tanggal Berlaku</label>
                             <input type="text" name="tgl_berlaku" class="form-control datepicker" id="tgl_berlaku"  value="{{ date('Y-m-d') }}" required>
@@ -243,7 +243,7 @@
             columns: [
                 {data: 'cek',className: "text-center", orderable: false, searchable: false},
                 {data: 'no', searchable: false},
-                {data: 'tgl'},
+                // {data: 'tgl'},
                 {data: 'pihak', orderable: false, searchable: false},
                 {data: 'tentang'},
                 {data: 'jenis', orderable: false, searchable: false},

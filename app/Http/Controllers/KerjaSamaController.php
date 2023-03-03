@@ -130,9 +130,9 @@ class KerjaSamaController extends Controller
             'jenis_id' => 'jenis kerjasama',
             'pihak_id' => 'pihak kerjasama',
             'bagian_id' => 'bagian kerjasama',
-            'no_surat_internal' => 'no surat internal',
+            //'no_surat_internal' => 'no surat internal',
             'kategori_id' => 'kategori',
-            'tgl' => 'tanggal kerjasama',
+            // 'tgl' => 'tanggal kerjasama',
             'tgl_berlaku' => 'tanggal berlaku',
             'tgl_berakhir' => 'tanggal berakhir',
         ];

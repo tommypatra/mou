@@ -58,13 +58,13 @@
           </a>
         </li>
         <li>
-          <a href="{{ route('kabupaten') }}">
-            <i class="bi bi-circle"></i><span>Kabupaten</span>
+          <a href="{{ route('provinsi') }}">
+            <i class="bi bi-circle"></i><span>Provinsi</span>
           </a>
         </li>
         <li>
-          <a href="{{ route('provinsi') }}">
-            <i class="bi bi-circle"></i><span>Provinsi</span>
+          <a href="{{ route('kabupaten') }}">
+            <i class="bi bi-circle"></i><span>Kabupaten</span>
           </a>
         </li>
       </ul>
