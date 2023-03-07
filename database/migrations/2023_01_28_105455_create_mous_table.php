@@ -22,14 +22,18 @@ class CreateMousTable extends Migration
             $table->date("tgl")->nullable();
             $table->date("tgl_berlaku")->nullable();
             $table->date("tgl_berakhir")->nullable();
+            $table->enum("selamanya", ["0", "1"])->default("0");
+
             $table->foreignId("pengguna_id");
             $table->foreignId("pihak_id");
             $table->foreignId("jenis_id");
             $table->foreignId("kategori_id");
+            $table->foreignId("bagian_id");
             $table->timestamps();
             $table->foreign("pengguna_id")->references("id")->on("penggunas")->restrictOnDelete();
             $table->foreign("pihak_id")->references("id")->on("pihaks")->restrictOnDelete();
             $table->foreign("jenis_id")->references("id")->on("jenis")->restrictOnDelete();
+            $table->foreign("bagian_id")->references("id")->on("bagians")->restrictOnDelete();
             $table->foreign("kategori_id")->references("id")->on("kategoris")->restrictOnDelete();
         });
     }

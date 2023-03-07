@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Kabupaten;
+use App\Models\ParaPihak;
+use App\Models\JenisPihak;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Pihak extends Model
 {
@@ -20,8 +23,8 @@ class Pihak extends Model
         return $this->belongsTo(JenisPihak::class);
     }
 
-    public function mou()
+    public function paraPihak()
     {
-        return $this->hasMany(Mou::class);
+        return $this->hasMany(ParaPihak::class);
     }
 }

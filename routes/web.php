@@ -81,7 +81,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/kerjasama-delete', [KerjaSamaController::class, 'delete'])->name('kerjasama-delete');
         Route::post('/kerjasama-upload', [KerjaSamaController::class, 'upload'])->name('kerjasama-upload');
         Route::post('/kerjasama-upload-delete', [KerjaSamaController::class, 'uploadDelete'])->name('kerjasama-upload-delete');
-
+        Route::post('/kerjasama-load-resources', [KerjaSamaController::class, 'loadResources'])->name('kerjasama-load-resources');
 
         Route::middleware(['isAdmin'])->group(function () {
             //akun

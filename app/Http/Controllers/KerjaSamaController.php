@@ -12,6 +12,8 @@ use App\Models\Jenis;
 use App\Models\Bagian;
 use App\Models\Kategori;
 use App\Models\Pengguna;
+use App\Models\Pihak;
+use App\Models\ParaPihak;
 use App\Models\File;
 use Facade\FlareClient\Http\Response;
 
@@ -20,44 +22,63 @@ class KerjaSamaController extends Controller
 
     public function index()
     {
+        // $ids = [];
+        // foreach (session()->get("bagians") as $bagian) {
+        //     $ids[] = $bagian['id'];
+        // }
+        // $dtjenis = Jenis::select('id', 'jenis as text')->where('aktif', '1')->get();
+        // $dtkategori = Kategori::select('id', 'kategori as text')->where('aktif', '1')->get();
+        // $dtbagian = Bagian::select('id', 'bagian as text')->whereIn('id', $ids)->get();
+        // $dtpihak = Pihak::select('id', 'pihak as text')->get();
+
+        // return view('dashboard.kerjasama', ['dtbagian' => $dtbagian, 'dtjenis' => $dtjenis, 'dtpihak' => $dtpihak, 'dtkategori' => $dtkategori]);
+        return view('dashboard.kerjasama');
+    }
+
+    public function loadResources()
+    {
+        $retval = array("status" => true, "messages" => ["data ditemukan"]);
+
         $ids = [];
         foreach (session()->get("bagians") as $bagian) {
             $ids[] = $bagian['id'];
         }
-        $dtjenis = Jenis::select('id', 'jenis as text')->where('aktif', '1')->get();
-        $dtkategori = Kategori::select('id', 'kategori as text')->where('aktif', '1')->get();
-        $dtbagian = Bagian::select('id', 'bagian as text')->whereIn('id', $ids)->get();
+        $retval['dtjenis'] = Jenis::select('id', 'jenis as text')->where('aktif', '1')->get();
+        $retval['dtkategori'] = Kategori::select('id', 'kategori as text')->where('aktif', '1')->get();
+        $retval['dtbagian'] = Bagian::select('id', 'bagian as text')->whereIn('id', $ids)->get();
+        $retval['dtpihak'] = Pihak::select('id', 'pihak as text')->get();
 
-        return view('dashboard.kerjasama', ['dtbagian' => $dtbagian, 'dtjenis' => $dtjenis, 'dtkategori' => $dtkategori]);
+        return response()->json($retval);
     }
 
     public function read()
     {
-        DB::statement(DB::raw('set @rownum=0'));
+        //DB::statement(DB::raw('set @rownum=0'));
         $data = Mou::select(
-            DB::raw('@rownum := @rownum + 1 AS no'),
+            //DB::raw('@rownum := @rownum + 1 AS no'),
             'id',
             'tentang',
             'ruang_lingkup',
-            'no_surat_internal',
-            'no_surat_eksternal',
-            'tgl',
+            //'no_surat_internal',
+            //'no_surat_eksternal',
+            //'tgl',
             'tgl_berlaku',
             'tgl_berakhir',
             'pengguna_id',
-            'pihak_id',
+            //'pihak_id',
             'jenis_id',
             'kategori_id',
         )
-            ->with(["pihak.kabupaten.provinsi"])
+            // ->with(["paraPihak.pihak.kabupaten.provinsi"])
+            ->with(["paraPihak.pihak"])
             ->with(["jenis"])
             ->with(["file"])
             ->with(["kategori"])
             ->with(["pengguna.akun"]);
-
+        //->orderBy('tgl_berlaku', 'DESC');
         return Datatables::of($data)->addIndexColumn()
             ->addColumn('no', function ($row) {
-                return $row->no;
+                return '';
             })
             ->editColumn('provinsi', function ($row) {
                 return (isset($row->pihak->kabupaten->provinsi)) ? $row->pihak->kabupaten->provinsi->provinsi : "";
@@ -84,8 +105,19 @@ class KerjaSamaController extends Controller
                 }
                 return $retval;
             })
-            ->addColumn('pihak', function ($row) {
-                return isset($row->pihak) ? $row->pihak->pihak : "";
+            ->addColumn('pihak_det', function ($row) {
+                $retval = "";
+                //dd($row->parapihak);
+                if (count($row->paraPihak) > 0) {
+                    $retval .= '<ul>';
+                    foreach ($row->paraPihak as $dt) {
+                        $retval .= '<li>';
+                        $retval .= $dt->pihak->pihak;
+                        $retval .= '</li>';
+                    }
+                    $retval .= '</ul>';
+                }
+                return $retval;
             })
             ->addColumn('kategori', function ($row) {
                 return isset($row->kategori) ? $row->kategori->kategori : "";
@@ -101,14 +133,14 @@ class KerjaSamaController extends Controller
                         <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="' . $row->id . '"><i class="bi bi-trash3"></i></button>';
                 return $btn;
             })
-            ->rawColumns(['no', 'pihak', 'action', 'cek', 'kategori', 'pengguna', 'jenis', 'file_det'])
+            ->rawColumns(['no', 'pihak_det', 'action', 'cek', 'kategori', 'pengguna', 'jenis', 'file_det'])
             ->make(true);
     }
 
     public function create(Request $request)
     {
         $retval = array("status" => false, "insert" => true, "messages" => ["gagal, hubungi admin"]);
-
+        $id = null;
         //cek apakah id ada atau tidak, kalau ada maka status edit dan jika tidak ada maka insert
         $insert = true;
         if ($request['id']) {
@@ -119,13 +151,15 @@ class KerjaSamaController extends Controller
             'jenis_id' => 'required',
             'pihak_id' => 'required',
             'bagian_id' => 'required',
-            'no_surat_internal' => 'required',
+            //'no_surat_internal' => 'required',
             'tentang' => 'required',
             'kategori_id' => 'required',
-            'tgl' => 'required|date',
-            'tgl_berlaku' => 'required|date|after_or_equal:tgl',
-            'tgl_berakhir' => 'required|date|after:tgl_berlaku',
+            //'tgl' => 'required|date',
+            'tgl_berlaku' => 'required|date',
+            //'tgl_berakhir' => 'required|date|after:tgl_berlaku',
+            'tgl_berakhir' => 'required|date|after_or_equal:tgl_berlaku',
         ];
+
         $niceNames = [
             'jenis_id' => 'jenis kerjasama',
             'pihak_id' => 'pihak kerjasama',
@@ -139,6 +173,8 @@ class KerjaSamaController extends Controller
         $datapost = $this->validate($request, $rules, [], $niceNames);
 
         $retval['insert'] = $insert;
+        //$datapost['no_surat_internal'] = "";
+        unset($rules['pihak_id']);
         try {
             DB::beginTransaction();
             if ($insert) {
@@ -147,9 +183,21 @@ class KerjaSamaController extends Controller
 
                 $id = Mou::create($datapost)->id;
             } else {
+                $id = $request['id'];
                 $cari = Mou::where("id", $request['id'])->first();
                 $cari->update($datapost);
             }
+
+            ParaPihak::where('mou_id', $id)->delete();
+            foreach ($request['pihak_id'] as $i => $dp) {
+                $datapost = [
+                    "pihak_id" => $dp,
+                    "mou_id" => $id,
+                ];
+                ParaPihak::create($datapost)->id;
+            }
+            //$cariParaPihak = Mou::where("mou_id", $id)->first();
+
             $retval["status"] = true;
             $retval["messages"] = ["Simpan data berhasil dilakukan"];
             DB::commit();
@@ -165,6 +213,7 @@ class KerjaSamaController extends Controller
         $retval = array("status" => false, "messages" => ["maaf, data tidak ditemukan"], "data" => []);
         try {
             $data = Mou::where('id', $request['id'])
+                ->with(["paraPihak.pihak"])
                 ->first();
             if ($data)
                 $retval = array("status" => true, "messages" => ["data ditemukan"], "data" => $data);
@@ -179,6 +228,7 @@ class KerjaSamaController extends Controller
         $retval = array("status" => false, "messages" => ["maaf, gagal dilakukan"]);
         try {
             $ids = $request['id'];
+            ParaPihak::whereIn('mou_id', $ids)->delete();
             Mou::whereIn('id', $ids)->delete();
             $retval = array("status" => true, "messages" => ["data berhasil dihapus"]);
         } catch (\Throwable $e) {

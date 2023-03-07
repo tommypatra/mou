@@ -3,22 +3,22 @@
 namespace App\Models;
 
 use App\Models\Mou;
-use App\Models\BagianAkun;
+use App\Models\Pihak;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Bagian extends Model
+class ParaPihak extends Model
 {
     use HasFactory;
     protected $guarded = ["id"];
 
-    public function bagianAkun()
-    {
-        return $this->hasMany(BagianAkun::class);
-    }
-
     public function mou()
     {
-        return $this->hasMany(Mou::class);
+        return $this->belongsTo(Mou::class);
+    }
+
+    public function pihak()
+    {
+        return $this->belongsTo(Pihak::class);
     }
 }

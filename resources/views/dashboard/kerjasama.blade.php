@@ -3,7 +3,8 @@
 @section('head')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" type="text/css" href="plugins/datatables/datatables.min.css"/>
-    <link href="plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css">
+    <link rel="stylesheet" type="text/css" href="plugins/select2/dist/css/select2.custom.css"/>
 @endsection
 
 @section('pagetitle')
@@ -40,7 +41,7 @@
                         <tr>
                             <th><input type="checkbox" class="cekSemua"></th>
                             <th>No</th>
-                            {{-- <th>Tanggal</th> --}}
+                            <th>Tanggal</th>
                             <th>Pihak</th>
                             <th>Kerja Sama</th>
                             <th>Jenis</th>
@@ -79,7 +80,7 @@
 
                         <div class="col-8">
                             <label for="pihak_id" class="form-label">Pihak Kerjasama</label>
-                            <select name="pihak_id" id="pihak_id" required>
+                            <select name="pihak_id[]" id="pihak_id" multiple="multiple" required>
                             </select>
                             <div class="invalid-feedback">pilih pihak!</div>
                         </div>
@@ -99,9 +100,9 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <label for="tentang" class="form-label">Judul Kerjasama</label>
+                            <label for="tentang" class="form-label">Tentang</label>
                             <textarea name="tentang" class="form-control" id="tentang" rows="3" required></textarea>
-                            <div class="invalid-feedback">ketik judul kerjasama !</div>
+                            <div class="invalid-feedback">ketik tentang kerjasama !</div>
                         </div>
                     </div>
                     <div class="row">
@@ -157,37 +158,53 @@
     <script src="js/select2lib.js"></script>
     <script type="text/javascript">
 
-        sel2_datalokal("#bagian_id",  {!! $dtbagian !!} , "#modal-form-web");
-        sel2_datalokal("#jenis_id",  {!! $dtjenis !!} , "#modal-form-web");
-        sel2_datalokal("#kategori_id",  {!! $dtkategori !!} , "#modal-form-web");
-        $("#pihak_id").select2({
-            minimumInputLength: 3,
-            placeholder: 'Cari pihak',
-            dropdownParent: $("#pihak_id").parent(),
-            ajax: {
-                url: "{{ route('pihak-search') }}",
-                dataType: 'json',
-                delay: 250,
-                type:'post',
-                data: function (params) {
-                    return {
-                        cari: params.term, // search term
-                        _token: $("meta[name='csrf-token']").attr("content"),
-                    };
-                },
-                processResults: function (data, params) {
-                    return {
-                        results: $.map(data, function (item) {
-                            return {
-                                text: item.pihak,
-                                id: item.id
-                            }
-                        })
-                    };
-                },
-                cache: true
-            }
-        });
+        loadResources();
+
+        function loadResources(){
+            var formVal={_token:$("input[name=_token]").val()};
+            appAjax("{{ route('kerjasama-load-resources') }}", formVal).done(function(vRet) {
+                if(vRet.status){
+                    sel2_datalokal("#bagian_id", vRet.dtbagian, "#modal-form-web");
+                    sel2_datalokal("#jenis_id", vRet.dtjenis, "#modal-form-web");
+                    sel2_datalokal("#kategori_id", vRet.dtkategori, "#modal-form-web");
+                    sel2_datalokal("#pihak_id", vRet.dtpihak, "#modal-form-web",false,true);
+                }
+            });
+        } 
+
+        //vselector, vdata={}, vModal=null, vAllow=false, vTags=false
+
+        // $("#pihak_id").select2({
+        //     minimumInputLength: 3,
+        //     tags: true,
+        //     placeholder: 'Cari pihak',
+        //     //tokenSeparators: [',', ' '],
+        //     dropdownParent: $("#pihak_id").parent(),
+        //     ajax: {
+        //         url: "{{ route('pihak-search') }}",
+        //         dataType: 'json',
+        //         delay: 250,
+        //         type:'post',
+                
+        //         data: function (params) {
+        //             return {
+        //                 cari: params.term, // search term
+        //                 _token: $("meta[name='csrf-token']").attr("content"),
+        //             };
+        //         },
+        //         processResults: function (data, params) {
+        //             return {
+        //                 results: $.map(data, function (item) {
+        //                     return {
+        //                         text: item.pihak,
+        //                         id: item.id
+        //                     }
+        //                 })
+        //             };
+        //         },
+        //         //cache: true
+        //     }
+        // });
 
         $('.datepicker').bootstrapMaterialDatePicker({
             weekStart: 0,
@@ -214,7 +231,7 @@
                 },
             },
             "order": [
-                [1, "asc"],
+                [2, "desc"],
             ],
             dom: '<"row"<"col-sm-6"B><"col-sm-6"f>> rt <"row"<"col-sm-4"l><"col-sm-4"i><"col-sm-4"p>>',
             buttons: [
@@ -243,8 +260,8 @@
             columns: [
                 {data: 'cek',className: "text-center", orderable: false, searchable: false},
                 {data: 'no', searchable: false},
-                // {data: 'tgl'},
-                {data: 'pihak', orderable: false, searchable: false},
+                {data: 'tgl_berlaku'},
+                {data: 'pihak_det', orderable: false, searchable: false},
                 {data: 'tentang'},
                 {data: 'jenis', orderable: false, searchable: false},
                 {data: 'kategori', orderable: false, searchable: false},
@@ -259,6 +276,18 @@
                     }
                 });
             },
+        });
+
+        dtTable.on('order.dt search.dt', function () {
+            let i = 1;
+            dtTable.cells(null, 1, { search: 'applied', order: 'applied' }).every(function (cell) {
+                this.data(i++);
+            });
+        }).draw();
+
+        $("#tgl_berlaku").change(function(){
+            //alert("ganti");
+            $("#tgl_berakhir").val($(this).val());
         });
 
         $(document).on("change",'.fileupload',function() {
@@ -303,9 +332,24 @@
         };
 
         function fillform(dt){
+            //console.log(dt);
             $('#id').val(dt.id);
-            $('#kerjasama').val(dt.kerjasama);
+            $('#tentang').val(dt.tentang);
+            $('#ruang_lingkup').val(dt.ruang_lingkup);
+            $('#tgl_berlaku').val(dt.tgl_berlaku);
+            $('#tgl_berakhir').val(dt.tgl_berakhir);
+            
+            $('#jenis_id').val(dt.jenis_id).trigger('change');
+            $('#bagian_id').val(dt.bagian_id).trigger('change');
+            $('#kategori_id').val(dt.kategori_id).trigger('change');
             $('#aktif').val(dt.aktif).trigger('change');
+            //console.log(dt.para_pihak);
+            let pihaks=[];
+            $.each(dt.para_pihak, function (key, val) {
+                pihaks[key]=val.id;
+            });            
+            $('#pihak_id').val(pihaks).trigger('change');
+
         }
 
         function reloadTable() {

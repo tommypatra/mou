@@ -2,8 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Jenis;
+use App\Models\Kategori;
+use App\Models\Bagian;
+use App\Models\Pengguna;
+use App\Models\ParaPihak;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Mou extends Model
 {
@@ -20,9 +25,14 @@ class Mou extends Model
         return $this->belongsTo(Kategori::class);
     }
 
-    public function pihak()
+    public function bagian()
     {
-        return $this->belongsTo(Pihak::class);
+        return $this->belongsTo(Bagian::class);
+    }
+
+    public function paraPihak()
+    {
+        return $this->hasMany(ParaPihak::class);
     }
 
     public function jenis()
