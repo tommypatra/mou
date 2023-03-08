@@ -65,12 +65,13 @@ class KerjaSamaController extends Controller
             'tgl_berlaku',
             'tgl_berakhir',
             'pengguna_id',
-            //'pihak_id',
+            'bagian_id',
             'jenis_id',
             'kategori_id',
         )
             // ->with(["paraPihak.pihak.kabupaten.provinsi"])
             ->with(["paraPihak.pihak"])
+            ->with(["bagian"])
             ->with(["jenis"])
             ->with(["file"])
             ->with(["kategori"])
@@ -85,6 +86,9 @@ class KerjaSamaController extends Controller
             })
             ->editColumn('kabupaten', function ($row) {
                 return (isset($row->pihak->kabupaten)) ? $row->pihak->kabupaten->kabupaten : "";
+            })
+            ->addColumn('bagian', function ($row) {
+                return isset($row->bagian) ? $row->bagian->bagian : "";
             })
             ->addColumn('jenis', function ($row) {
                 return isset($row->jenis) ? $row->jenis->jenis : "";
@@ -133,7 +137,7 @@ class KerjaSamaController extends Controller
                         <button type="button" class="btn btn-sm btn-danger btn-hapus" data-id="' . $row->id . '"><i class="bi bi-trash3"></i></button>';
                 return $btn;
             })
-            ->rawColumns(['no', 'pihak_det', 'action', 'cek', 'kategori', 'pengguna', 'jenis', 'file_det'])
+            ->rawColumns(['no', 'bagian', 'pihak_det', 'action', 'cek', 'kategori', 'pengguna', 'jenis', 'file_det'])
             ->make(true);
     }
 

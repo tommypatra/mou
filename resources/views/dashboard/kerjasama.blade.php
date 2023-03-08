@@ -44,6 +44,7 @@
                             <th>Tanggal</th>
                             <th>Pihak</th>
                             <th>Kerja Sama</th>
+                            <th>Bagian</th>
                             <th>Jenis</th>
                             <th>Kategori</th>
                             <th>File Arsip</th>
@@ -263,6 +264,7 @@
                 {data: 'tgl_berlaku'},
                 {data: 'pihak_det', orderable: false, searchable: false},
                 {data: 'tentang'},
+                {data: 'bagian', orderable: false, searchable: false},
                 {data: 'jenis', orderable: false, searchable: false},
                 {data: 'kategori', orderable: false, searchable: false},
                 {data: 'file_det', orderable: false, searchable: false},
