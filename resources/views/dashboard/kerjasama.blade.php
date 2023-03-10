@@ -341,6 +341,7 @@
             $('#tgl_berlaku').val(dt.tgl_berlaku);
             $('#tgl_berakhir').val(dt.tgl_berakhir);
             
+            
             $('#jenis_id').val(dt.jenis_id).trigger('change');
             $('#bagian_id').val(dt.bagian_id).trigger('change');
             $('#kategori_id').val(dt.kategori_id).trigger('change');
@@ -348,7 +349,7 @@
             //console.log(dt.para_pihak);
             let pihaks=[];
             $.each(dt.para_pihak, function (key, val) {
-                pihaks[key]=val.id;
+                pihaks[key]=val.pihak_id;
             });            
             $('#pihak_id').val(pihaks).trigger('change');
 
